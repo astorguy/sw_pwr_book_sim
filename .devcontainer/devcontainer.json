@@ -1,0 +1,56 @@
+{
+  // "image": "mcr.microsoft.com/devcontainers/python:3.12-bookworm",
+  "name": "debian12_python3_12_ngspice",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "hostRequirements": {
+    "cpus": 2
+  },
+  "waitFor": "onCreateCommand",
+  //  These next two lines commented because they are done in Dockerfile
+  // "updateContentCommand": "python3 -m pip install -r requirements.txt",
+  // "postCreateCommand": "sudo apt-get update && sudo apt-get -y install ngspice",
+  "customizations": {
+    "codespaces": {
+      "openFiles": []
+    },
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "editor.formatOnSave": true,
+        "python.analysis.typeCheckingMode": "basic",
+        "python.formatting.autopep8Path": "/usr/local/py-utils/bin/autopep8",
+        "python.formatting.blackPath": "/usr/local/py-utils/bin/black",
+        "python.formatting.yapfPath": "/usr/local/py-utils/bin/yapf",
+        "workbench.colorTheme": "One Dark Pro",
+        "python.formatting.provider": "none",
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.black-formatter",
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+          }
+        },
+        "isort.args": [
+          "--profile",
+          "black"
+        ]
+      },
+      "extensions": [
+        "njpwerner.autodocstring",
+        "naumovs.color-highlight",
+        "ms-azuretools.vscode-docker",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "ms-python.flake8",
+        "ms-python.isort",
+        "ms-toolsai.jupyter",
+        "zhuangtongfa.material-theme",
+        "yy0931.mplstyle",
+        "xuanli.spice"
+      ]
+    }
+  }
+}
