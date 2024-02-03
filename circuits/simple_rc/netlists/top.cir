@@ -1,0 +1,19 @@
+* A simple rc circuit
+R1 IN MID 47K
+C1 COM MID 0.1U
+R2 MID OUT 100
+RLOAD OUT 0 100K
+VCOM COM 0 0
+* PULSE (V1 V2 TD TR TF PW PER NP)
+VIN IN 0 PULSE (0 10 0 3N 3N 100M)
+.control
+* Timestamp: Sat Feb 3 23:03:43 2024
+set wr_singlescale $ makes one x-axis for wrdata
+set wr_vecnames $ puts names at top of columns
+listing
+op
+print line in mid > /workspaces/sw_pwr_book_sim/circuits/simple_rc/sim_results/op1.txt
+tran 1e-3 20e-3
+wrdata /workspaces/sw_pwr_book_sim/circuits/simple_rc/sim_results/tr1.txt in mid
+quit
+.endc
