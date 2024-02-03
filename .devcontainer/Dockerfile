@@ -7,6 +7,8 @@ RUN apt-get update && sudo apt-get -y install ngspice
 COPY requirements.txt /tmp
 WORKDIR /tmp
 RUN python3 -m pip install -r requirements.txt
+
+
 # RUN pip install ipykernel==6.29.0
 # RUN pip install ipywidgets==8.1.1
 # RUN pip install numpy==1.26.3
