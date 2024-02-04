@@ -7,7 +7,7 @@ VCOM COM 0 0
 * PULSE (V1 V2 TD TR TF PW PER NP)
 VIN IN 0 PULSE (0 10 0 3N 3N 100M)
 .control
-* Timestamp: Sat Feb 3 23:03:43 2024
+* Timestamp: Sun Feb 4 03:01:37 2024
 set wr_singlescale $ makes one x-axis for wrdata
 set wr_vecnames $ puts names at top of columns
 listing
