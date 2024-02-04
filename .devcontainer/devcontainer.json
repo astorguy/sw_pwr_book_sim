@@ -16,6 +16,20 @@
       "openFiles": []
     },
     "vscode": {
+      "extensions": [
+        "njpwerner.autodocstring",
+        "naumovs.color-highlight",
+        "ms-azuretools.vscode-docker",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "ms-python.flake8",
+        "ms-python.isort",
+        "ms-toolsai.jupyter",
+        "wesbos.theme-cobalt2",
+        "yy0931.mplstyle",
+        "xuanli.spice"
+      ],
       "settings": {
         "python.defaultInterpreterPath": "/usr/local/bin/python",
         "editor.formatOnSave": true,
@@ -23,7 +37,7 @@
         "python.formatting.autopep8Path": "/usr/local/py-utils/bin/autopep8",
         "python.formatting.blackPath": "/usr/local/py-utils/bin/black",
         "python.formatting.yapfPath": "/usr/local/py-utils/bin/yapf",
-        "workbench.colorTheme": "One Dark Pro",
+        "workbench.colorTheme": "Cobalt2",
         "python.formatting.provider": "none",
         "[python]": {
           "editor.defaultFormatter": "ms-python.black-formatter",
@@ -36,21 +50,7 @@
           "--profile",
           "black"
         ]
-      },
-      "extensions": [
-        "njpwerner.autodocstring",
-        "naumovs.color-highlight",
-        "ms-azuretools.vscode-docker",
-        "ms-python.python",
-        "ms-python.vscode-pylance",
-        "ms-python.black-formatter",
-        "ms-python.flake8",
-        "ms-python.isort",
-        "ms-toolsai.jupyter",
-        "zhuangtongfa.material-theme",
-        "yy0931.mplstyle",
-        "xuanli.spice"
-      ]
+      }
     }
   }
 }
