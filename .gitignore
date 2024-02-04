@@ -1,3 +1,8 @@
+# Specific to Ngspice simulation
+top.cir
+control.cir
+sim_results
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
