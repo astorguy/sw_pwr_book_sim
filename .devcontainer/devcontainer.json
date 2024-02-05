@@ -8,9 +8,7 @@
     "cpus": 2
   },
   "waitFor": "onCreateCommand",
-  //  These next two lines commented because they are done in Dockerfile
-  // "updateContentCommand": "python3 -m pip install -r requirements.txt",
-  // "postCreateCommand": "sudo apt-get update && sudo apt-get -y install ngspice",
+  // "postCreateCommand": "cp /app/.bashrc ~ && source ~/.bashrc",
   "customizations": {
     "codespaces": {
       "openFiles": []
@@ -32,6 +30,7 @@
         "xuanli.spice"
       ],
       "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
         "python.defaultInterpreterPath": "/usr/local/bin/python",
         "editor.formatOnSave": true,
         "python.analysis.typeCheckingMode": "basic",
