@@ -32,6 +32,7 @@
         "xuanli.spice"
       ],
       "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
         "python.defaultInterpreterPath": "/usr/local/bin/python",
         "editor.formatOnSave": true,
         "python.analysis.typeCheckingMode": "basic",
