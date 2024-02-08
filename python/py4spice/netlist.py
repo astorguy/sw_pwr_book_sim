@@ -4,7 +4,7 @@
 # * my circuit
 # R1 N2 N2 100
 # R2 N2 0 200
-# VIN N1 0 DC 10V
+# VIN N1 0 DC 10
 # Here is an example of the resulting data structure upon reading in the file:
 # [["* my circuit"],
 # ["R1","N2", "N2", "100"],
@@ -18,15 +18,21 @@
 # We will use type hinting for the class and the methods.
 # We will use pathlib for the filename.
 
-import pathlib as Path
-from typing import Optional
+from typing import List, Optional
+from pathlib import Path
 
 class Netlist:
     def __init__(self, filename: Optional[Path] = None):
-        self.filename = filename
-        self.data = [[]]
+        self.data: List[List[str]] = []
         if filename:
             self.read_file(filename)
 
-
+    def read_file(self, filename: Path) -> None:
+        with open(filename, 'r') as file:
+            for line in file:
+                line = line.strip()
+                if line.startswith("*"):
+                    self.data.append(line)  # Add the comment as a single element list
+                elif line:  # Skip empty lines
+                    self.data.append(line.split())
 
