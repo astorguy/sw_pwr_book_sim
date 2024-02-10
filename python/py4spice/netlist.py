@@ -22,3 +22,12 @@ class Netlist:
         combined_data = self.data + other.data
         return Netlist("\n".join(combined_data))
 
+    def delete_line(self, index: int) -> None:
+        del self.data[index]
+
+    def line_starts_with(self, string: str) -> int:
+        for i, line in enumerate(self.data):
+            if line.startswith(string):
+                return i
+        return -1
+    
