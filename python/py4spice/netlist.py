@@ -30,4 +30,6 @@ class Netlist:
             if line.startswith(string):
                 return i
         return -1
-    
+
+    def insert_line(self, index: int, line: str) -> None:
+        self.data.insert(index, line)
