@@ -1,5 +1,0 @@
-* my circuit
-R1 N2 N2 100
-R2 N2 0 200
-* a second comment
-VIN N1 0 DC 10
