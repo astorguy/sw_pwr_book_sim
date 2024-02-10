@@ -31,5 +31,10 @@ class Netlist:
                 return i
         return -1
 
+    def del_line_starts_with(self, string: str) -> None:
+        index = self.line_starts_with(string)
+        if index != -1:
+            del self.data[index]
+
     def insert_line(self, index: int, line: str) -> None:
         self.data.insert(index, line)
