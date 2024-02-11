@@ -248,3 +248,63 @@ class SimResults:
         """
         index = self.header.index(signal_name)
         return str(self.data[index][0])
+
+    def add_signal(self, sig_name: str, column_array: numpy_flt):
+        """Adds a another signal to the object
+
+        Args:
+            sig_name (str): name of the new sign
+            column_array (numpy_flt): numpy 1D column; number of pts must match the other sigs
+        """
+        self.header.append(sig_name)  # add in the name to the header
+        self.data = np.column_stack((self.data, column_array))  # add in numpy column
+
+    def rename_signals(self, old_sigs: list[str], new_sigs: list[str]):
+        """rename list of existing signals with the list of new signals
+
+        Args:
+            old_sigs (list[str]): existing (old) signals
+            new_sigs (list[str]): signals (new) to replace old signals
+        """
+        for i, sig in enumerate(old_sigs):
+            if sig in self.header:
+                index = self.header.index(sig)
+                self.header[index] = new_sigs[i]
+
+    def multiply(self, factor1_name: str, factor2_name: str, result_name: str) -> None:
+        """multiplies the two signals and adds the result to the object
+
+        Args:
+            factor1_name (str): signal name of factor1
+            factor2_name (str): signal name of factor2
+            result_name (str): signal name of the result (added to the object)
+        """
+        fac1: numpy_flt = self.single_column(factor1_name)
+        fac2: numpy_flt = self.single_column(factor2_name)
+        result: numpy_flt = fac1 * fac2
+        self.add_signal(result_name, result)
+
+    def scaler(self, scalar: float, signal_name: str, result_name: str) -> None:
+        """Scalar multiple and adds the result to the object
+
+        Args:
+            scalar (float): the scalar
+            signal_name (str): sig name to be multiplied
+            result_name (str): signal name of the result (added to the object)
+        """
+        sig = self.single_column(signal_name)
+        result = scalar * sig
+        self.add_signal(result_name, result)
+
+    def divide(self, dividend_name: str, divisor_name: str, result_name: str) -> None:
+        """Divides the dividend by the divisor and adds the result to the object
+
+        Args:
+            dividend_name (str): signal name of dividend
+            divisor_name (str): signal name of divisor
+            result_name (str): signal name of the result (added to the object)
+        """
+        dividend = self.single_column(dividend_name)
+        divisor = self.single_column(divisor_name)
+        result = dividend / divisor
+        self.add_signal(result_name, result)
