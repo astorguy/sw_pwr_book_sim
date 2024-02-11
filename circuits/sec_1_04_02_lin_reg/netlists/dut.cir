@@ -1,2 +1,4 @@
-r1 in out1 140
-r2 in out2 132
+rupper div out 10k
+rlower vee div 10k
+e1 q1_base vee vee div 10k
+q1 out q1_base in 2n2222
