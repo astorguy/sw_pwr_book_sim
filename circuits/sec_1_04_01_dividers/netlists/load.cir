@@ -1,2 +1,4 @@
-RLOAD1 OUT1 VEE 100
-RLOAD2 OUT2 VEE 50
+rload1 out1 out1_meas 100
+rload2 out2 out2_meas 50
+vmeas1 out1_meas 0 dc 0
+vmeas2 out2_meas 0 dc 0
