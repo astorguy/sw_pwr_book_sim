@@ -4,19 +4,20 @@ from typing import Optional
 
 class Netlist:
     """Manipulates SPICE netlists"""
+
     def __init__(self, filename_or_string: Optional[Path | str] = None) -> None:
         self.data: list[str] = []
         if isinstance(filename_or_string, Path):
             with open(filename_or_string, "r") as file:
-                self.data = [line.rstrip("\n") for line in file.readlines()]
+                self.data = [line.rstrip("\n").lower() for line in file.readlines()]
         if isinstance(filename_or_string, str):
-            self.data = filename_or_string.split("\n")
+            self.data = filename_or_string.lower().split("\n")
 
     def __str__(self) -> str:
         return "\n".join(self.data)
 
     def write_to_file(self, filename: Path) -> None:
-        """"Write netlist object data to a file"""
+        """ "Write netlist object data to a file"""
         with open(filename, "w") as file:
             file.write("\n".join(self.data))
 
@@ -43,4 +44,4 @@ class Netlist:
 
     def insert_line(self, index: int, line: str) -> None:
         """inserts string line at index in data list"""
-        self.data.insert(index, line)
+        self.data.insert(index, line.lower())
