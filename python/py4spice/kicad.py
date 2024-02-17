@@ -3,6 +3,7 @@ import subprocess
 from subprocess import CompletedProcess
 from pathlib import Path
 
+
 class Kicad:
     """KiCad netlist export command"""
 
