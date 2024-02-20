@@ -45,3 +45,10 @@ class Netlist:
     def insert_line(self, index: int, line: str) -> None:
         """inserts string line at index in data list"""
         self.data.insert(index, line.lower())
+
+    def del_slash(self) -> None:
+        """Deletes foward slashes in lines that begin with letters a through z
+        regardless of case"""
+        self.data = [
+            line.replace("/", "") if line[0].isalpha() else line for line in self.data
+        ]
