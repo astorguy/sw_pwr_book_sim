@@ -1,2 +1,4 @@
-r1 in out1 140
-r2 in out2 132
+r1 in out2 140
+r2 in out1 132
+rload1 out2 out2_com 100
+rload2 out1 out1_com 50
