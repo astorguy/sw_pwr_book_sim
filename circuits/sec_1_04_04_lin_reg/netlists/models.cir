@@ -1,3 +1,7 @@
-.MODEL 2N2222 NPN BF=105 BR=4 CJC=12.2P CJE=35.5P IKF=.5
-+ IKR=.225 IS=15.2F ISE=8.2P NE=2 NF=1 NR=1 RB=1.49 RC=.149
-+ RE=.373 TF=500P TR=85N VAF=98.5 VAR=20 XTB=1.5
+.subckt gain in out k=1
+E1 out 0 in 0 {K}
+.ends gain
+
+.subckt sum in1 in2 out k1=1 k2=1 a=1
+b1 out 0 v = {a * ((v(in1) * k1) + (v(in2) * k2))}
+.ends sum
