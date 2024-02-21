@@ -37,6 +37,8 @@
         "python.formatting.autopep8Path": "/usr/local/py-utils/bin/autopep8",
         "python.formatting.blackPath": "/usr/local/py-utils/bin/black",
         "python.formatting.yapfPath": "/usr/local/py-utils/bin/yapf",
+        "python.analysis.inlayHints.functionReturnTypes":true,
+        "python.analysis.inlayHints.variableTypes":true,
         "workbench.colorTheme": "Cobalt2",
         "python.formatting.provider": "none",
         "[python]": {
