@@ -1,4 +1,9 @@
-rupper div out 10k
-rlower vee div 10k
-e1 q1_base vee ref div 10k
-q1 out q1_base in 2n2222
+rf1 beta rc 100
+cf1 rc div 100n
+rlower1 div com 10k
+e1 beta com vref div 100
+rupper1 out div 10k
+e2 g com beta com 10
+x2 in gain gain k=0.05
+rsol1 sum out 1
+x3 gain g sum sum k1=1 k2=1 a=1
