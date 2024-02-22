@@ -19,7 +19,7 @@ class Kicad:
         self.cmd_args.append("sch")
         self.cmd_args.append("export")
         self.cmd_args.append("netlist")
-        self.cmd_args.append(f"--output")
+        self.cmd_args.append("--output")
         self.cmd_args.append(f"{self.netlist_filename}")
         self.cmd_args.append("--format")
         self.cmd_args.append("spice")
