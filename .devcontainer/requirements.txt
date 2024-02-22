@@ -1,7 +1,7 @@
 mypy
-ipykernel==6.29.0
-ipywidgets==8.1.1
-isort==5.13.2
-numpy==1.26.0
-matplotlib==3.8.2
-scipy==1.12.0
+ipykernel
+ipywidgets
+isort
+numpy
+matplotlib
+scipy
