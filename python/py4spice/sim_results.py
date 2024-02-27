@@ -203,9 +203,11 @@ class SimResults:
         lines = []
         lines.extend(
             [
-                f"{h:<{second_col_start - 1}}{d[0]}"
-                if d[0] < 0
-                else f"{h:<{second_col_start}}{d[0]}"
+                (
+                    f"{h:<{second_col_start - 1}}{d[0]}"
+                    if d[0] < 0
+                    else f"{h:<{second_col_start}}{d[0]}"
+                )
                 for h, d in zip(self.header, self.data)
             ]
         )
@@ -254,7 +256,7 @@ class SimResults:
 
         Args:
             sig_name (str): name of the new sign
-            column_array (numpy_flt): numpy 1D column; number of pts must match the other sigs
+            column_array (numpy_flt): numpy 1D column; num of pts must match other sigs
         """
         self.header.append(sig_name)  # add in the name to the header
         self.data = np.column_stack((self.data, column_array))  # add in numpy column
