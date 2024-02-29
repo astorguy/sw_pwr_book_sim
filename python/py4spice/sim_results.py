@@ -239,7 +239,7 @@ class SimResults:
 
         return list_of_numpys
 
-    def table_value(self, signal_name: str) -> str:
+    def table_value(self, signal_name: str) -> float:
         """return the value of the signal. Must be table data.
 
         Args:
@@ -249,7 +249,7 @@ class SimResults:
             str: value of the table data
         """
         index = self.header.index(signal_name)
-        return str(self.data[index][0])
+        return float(self.data[index][0])
 
     def add_signal(self, sig_name: str, column_array: numpy_flt):
         """Adds a another signal to the object
