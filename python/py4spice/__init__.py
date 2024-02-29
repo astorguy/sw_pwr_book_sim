@@ -15,7 +15,6 @@ from .netlist import Netlist
 from .plot import display_plots
 from .plot import Plot
 from .print_section import print_section
-from .signals import Signals
 from .simulate import Simulate
 from .sim_results import SimResults
 from .vectors import Vectors
@@ -28,7 +27,6 @@ __all__ = (
     "display_plots",
     "Plot",
     "print_section",
-    "Signals",
     "Simulate",
     "SimResults",
     "StepInfo",

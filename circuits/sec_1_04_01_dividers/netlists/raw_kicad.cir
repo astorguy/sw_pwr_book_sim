@@ -1,6 +1,6 @@
 .title KiCad schematic
-R1 in out2 140
-R2 in out1 132
-RLOAD1 out2 out2_com 100
-RLOAD2 out1 out1_com 50
+R1 in out1 140
+R2 in out2 132
+RLOAD1 out1 out1_com 100
+RLOAD2 out2 out2_com 50
 .end

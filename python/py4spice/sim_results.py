@@ -203,9 +203,11 @@ class SimResults:
         lines = []
         lines.extend(
             [
-                f"{h:<{second_col_start - 1}}{d[0]}"
-                if d[0] < 0
-                else f"{h:<{second_col_start}}{d[0]}"
+                (
+                    f"{h:<{second_col_start - 1}}{d[0]}"
+                    if d[0] < 0
+                    else f"{h:<{second_col_start}}{d[0]}"
+                )
                 for h, d in zip(self.header, self.data)
             ]
         )
@@ -237,7 +239,7 @@ class SimResults:
 
         return list_of_numpys
 
-    def table_value(self, signal_name: str) -> str:
+    def table_value(self, signal_name: str) -> float:
         """return the value of the signal. Must be table data.
 
         Args:
@@ -247,14 +249,14 @@ class SimResults:
             str: value of the table data
         """
         index = self.header.index(signal_name)
-        return str(self.data[index][0])
+        return float(self.data[index][0])
 
     def add_signal(self, sig_name: str, column_array: numpy_flt):
         """Adds a another signal to the object
 
         Args:
             sig_name (str): name of the new sign
-            column_array (numpy_flt): numpy 1D column; number of pts must match the other sigs
+            column_array (numpy_flt): numpy 1D column; num of pts must match other sigs
         """
         self.header.append(sig_name)  # add in the name to the header
         self.data = np.column_stack((self.data, column_array))  # add in numpy column
