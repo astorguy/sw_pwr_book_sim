@@ -1,9 +1,11 @@
 """Convert text file simulation results to objects"""
 
 from pathlib import Path
+
 import numpy as np
 from scipy.interpolate import interp1d
-from .globals_types import AnaType, numpy_flt, TABLE_DATA
+
+from .globals_types import TABLE_DATA, AnaType, numpy_flt
 
 
 class SimResults:
@@ -117,7 +119,6 @@ class SimResults:
             tuple[list[str], numpy_flt]: data ready to make object
         """
         dup_indexes = SimResults._find_duplicate_indexes(header_in)
-        print(f"dup indexes are: {dup_indexes}")
 
         # delete dups in data numpy array
         data_without_dups = np.delete(data_in, dup_indexes, axis=1)
