@@ -191,13 +191,12 @@ class SimResults:
 
         self.data = new_array
 
-    def print_table(self, x_value: float = 0.0) -> str:
+    def print_table(self) -> str:
         """Print out the data for types in table form
 
         Returns:
             str: output that can be printed
         """
-        print(x_value)
         padding = 3
         second_col_start = len(max(self.header, key=len)) + padding
 
