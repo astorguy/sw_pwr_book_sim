@@ -1,4 +1,4 @@
 e2 base vee ref div 10k
 q1 in base out 2n2222   
-rlower1 div vee 100
-rupper1 out div 50
+rlower1 div vee 10k
+rupper1 out div 10k
