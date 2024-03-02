@@ -41,7 +41,7 @@
         "python.formatting.yapfPath": "/usr/local/py-utils/bin/yapf",
         "python.analysis.inlayHints.functionReturnTypes":true,
         "python.analysis.inlayHints.variableTypes":true,
-        "workbench.colorTheme": "Solarized Light+",
+        "workbench.colorTheme": "Cobalt2",
         "python.formatting.provider": "none",
         "[python]": {
           "editor.defaultFormatter": "ms-python.black-formatter",
