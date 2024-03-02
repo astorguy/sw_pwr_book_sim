@@ -5,6 +5,7 @@ WORKDIR /app
 # install ngspice
 RUN apt-get update && \
     sudo apt-get -y install ngspice && \
+    sudo apt-get -y install kicad kicad-libraries && \
     rm -rf /var/lib/apt/lists/*
 
 # intstall my Python modules
