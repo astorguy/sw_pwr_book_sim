@@ -1,6 +1,6 @@
 .title KiCad schematic
-.include "G:/My Drive/_TechSharpen/KiCad/libraries/ngspice_models/gain.lib"
-.include "G:/My Drive/_TechSharpen/KiCad/libraries/ngspice_models/sum.lib"
+.include "/workspaces/sw_pwr_book_sim/circuits/sec_1_04_04_lin_reg/kicad_schematics/gain.lib"
+.include "/workspaces/sw_pwr_book_sim/circuits/sec_1_04_04_lin_reg/kicad_schematics/sum.lib"
 RF1 /beta /rc 100
 CF1 /rc /div 100n
 RLOWER1 /div com 10k

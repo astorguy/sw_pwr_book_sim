@@ -9,7 +9,7 @@ from .globals_types import (
     TIME_AXIS,
     FREQ_AXIS,
 )
-from .kicad import Kicad
+from .kicad_netlist import KicadNetlist
 from .step_info import StepInfo
 from .netlist import Netlist
 from .plot import display_plots
@@ -22,7 +22,7 @@ from .vectors import Vectors
 __all__ = (
     "Analyses",
     "Control",
-    "Kicad",
+    "KicadNetlist",
     "Netlist",
     "display_plots",
     "Plot",
