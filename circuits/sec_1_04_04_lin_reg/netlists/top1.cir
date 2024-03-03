@@ -26,7 +26,7 @@ b1 out 0 v = {a * ((v(in1) * k1) + (v(in2) * k2))}
 .ends sum
 
 .control
-* timestamp: sun mar  3 05:22:30 2024
+* timestamp: sun mar  3 06:00:25 2024
 set wr_singlescale  $ makes one x-axis for wrdata
 set wr_vecnames     $ puts names at top of columns
 listing
