@@ -12,7 +12,7 @@ from subprocess import CompletedProcess
 SCH_NAME = "sec_1_04_04_lin_reg"
 
 # Kicad cammand line executable
-KICAD_CMD = Path("C:/Program Files/KiCad/7.0/bin/kicad-cli.exe")
+KICAD_CMD = Path("/usr/bin/kicad-cli")
 
 SCH_FILENAME = Path(".") / f"{SCH_NAME}.kicad_sch"
 NETLIST_FILENAME = Path(".") / "raw_kicad.cir"

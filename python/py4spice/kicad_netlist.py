@@ -4,7 +4,7 @@ from subprocess import CompletedProcess
 from pathlib import Path
 
 
-class Kicad:
+class KicadNetlist:
     """KiCad netlist export command"""
 
     def __init__(
