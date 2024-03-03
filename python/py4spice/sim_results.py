@@ -251,7 +251,7 @@ class SimResults:
         index = self.header.index(signal_name)
         return float(self.data[index][0])
 
-    def add_signal(self, sig_name: str, column_array: numpy_flt):
+    def add_signal(self, sig_name: str, column_array: numpy_flt) -> None:
         """Adds a another signal to the object
 
         Args:
@@ -261,7 +261,7 @@ class SimResults:
         self.header.append(sig_name)  # add in the name to the header
         self.data = np.column_stack((self.data, column_array))  # add in numpy column
 
-    def rename_signals(self, old_sigs: list[str], new_sigs: list[str]):
+    def rename_signals(self, old_sigs: list[str], new_sigs: list[str]) -> None:
         """rename list of existing signals with the list of new signals
 
         Args:
