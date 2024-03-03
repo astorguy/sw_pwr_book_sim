@@ -37,29 +37,3 @@ class Kicad:
     def run(self) -> CompletedProcess[bytes]:
         """execute the kicad cmd"""
         return subprocess.run(self.cmd_args, check=False)
-
-    def delete_forward_slashes(self) -> None:
-        """Delete forward slashes from all node names in the netlist file."""
-
-        # Open the file for reading and writing
-        with open(self.netlist_filename, "r+") as file:
-            lines: list[str] = file.readlines()  # Read the lines
-            file.seek(0)  # Move the file pointer back to the beginning
-
-            # Iterate through each line
-            for line in lines:
-                # Check if the line starts with a letter
-                if line[0].isalpha():
-                    # Split the line into words
-                    words: list[str] = line.split()
-                    # Remove the forward slash from each word that starts with it
-                    words = [
-                        word[1:] if word.startswith("/") else word for word in words
-                    ]
-                    # Join the words back together into a line
-                    line: str = " ".join(words) + "\n"
-                # Write the modified line back to the file
-                file.write(line)
-
-            # Truncate the file to the current position to remove any leftover content
-            file.truncate()
