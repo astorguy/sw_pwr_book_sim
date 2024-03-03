@@ -1,4 +1,5 @@
 * linear regulator, section 1.4.4
+
 rf1 beta rc 100
 cf1 rc div 100n
 rlower1 div com 10k
@@ -10,9 +11,12 @@ rsol1 sum out 1
 x3 gain g sum sum k1=1 k2=1 a=1
 rload out out_meas 50
 vmeas out_meas 0 dc 0
+
 vcom com 0 dc 0
 vref vref 0 dc 2.5
+
 vin in 0 dc 15
+
 .subckt gain in out k=1
 e1 out 0 in 0 {k}
 .ends gain
@@ -20,8 +24,9 @@ e1 out 0 in 0 {k}
 .subckt sum in1 in2 out k1=1 k2=1 a=1
 b1 out 0 v = {a * ((v(in1) * k1) + (v(in2) * k2))}
 .ends sum
+
 .control
-* timestamp: sun mar  3 04:10:13 2024
+* timestamp: sun mar  3 05:04:02 2024
 set wr_singlescale  $ makes one x-axis for wrdata
 set wr_vecnames     $ puts names at top of columns
 listing
@@ -31,4 +36,5 @@ tf v(out) vin
 print line all > /workspaces/sw_pwr_book_sim/circuits/sec_1_04_04_lin_reg/sim_results/tf1.txt
 quit
 .endc
+
 .end
