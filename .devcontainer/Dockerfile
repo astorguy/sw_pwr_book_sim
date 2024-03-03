@@ -4,13 +4,13 @@ WORKDIR /app
 
 COPY bookworm-backports.list /etc/apt/sources.list.d/
 
-# install ngspice and kicad
+# Install ngspice and kicad
 RUN apt-get update && \
-    sudo apt-get -y install ngspice && \
-    sudo apt-get -t bookworm-backports -y install kicad && \
+    apt-get -y install ngspice && \
+    apt-get -t bookworm-backports -y install kicad && \
     rm -rf /var/lib/apt/lists/*
 
-# intstall my Python modules
+# Install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-RUN rm ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt && \
+    rm requirements.txt
