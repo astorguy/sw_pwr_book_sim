@@ -1,0 +1,15 @@
+# Top-level settings (common to all projects)
+[global]
+debug = true
+log_level = "info"
+
+# Project-specific settings
+[project.project1]
+name = "Project 1"
+api_url = "https://api.example.com/v1"
+database_uri = "postgres://user:password@localhost:5432/project1_db"
+
+[project.project2]
+name = "Project 2"
+api_url = "https://api.example.org/v2"
+database_uri = "mysql://user:password@localhost:3306/project2_db"
