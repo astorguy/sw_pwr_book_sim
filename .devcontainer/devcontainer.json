@@ -40,9 +40,6 @@
         "python.analysis.inlayHints.variableTypes":true,
         "workbench.colorTheme": "Cobalt2",
         "python.formatting.provider": "black",
-        "python.linting.flake8Enabled": true,
-        "python.linting.enabled": true,
-        "python.linting.lintOnSave": true,
         "[python]": {
           "editor.defaultFormatter": "ms-python.black-formatter",
           "editor.formatOnSave": true,
