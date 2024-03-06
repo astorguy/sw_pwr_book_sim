@@ -33,12 +33,9 @@
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
-        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.pythonPath": "/usr/local/bin/python",
         "editor.formatOnSave": true,
         "python.analysis.typeCheckingMode": "basic",
-        "python.formatting.autopep8Path": "/usr/local/py-utils/bin/autopep8",
-        "python.formatting.blackPath": "/usr/local/py-utils/bin/black",
-        "python.formatting.yapfPath": "/usr/local/py-utils/bin/yapf",
         "python.analysis.inlayHints.functionReturnTypes":true,
         "python.analysis.inlayHints.variableTypes":true,
         "workbench.colorTheme": "Cobalt2",
