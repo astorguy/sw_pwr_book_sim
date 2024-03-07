@@ -22,7 +22,7 @@ def load_config(file_to_read: Path = Path("./config.toml")) -> dict[str, Any]:
     If Path to file not given, read ./config.toml.
     """
     with open(file_to_read, "rb") as file:
-        toml_data: dict = tomllib.load(file)
+        toml_data: dict[str, Any] = tomllib.load(file)
     return toml_data
 
 
