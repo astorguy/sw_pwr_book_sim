@@ -16,7 +16,7 @@ PROJ_NAME: str = "sec_1_04_04"
 # endregion
 
 
-# initialize
+# region initialize
 def load_config(file_to_read: Path = Path("./config.toml")) -> dict[str, Any]:
     """Read a config file in toml format and return a dictionary with the data.
     If Path to file not given, read ./config.toml.
@@ -47,11 +47,22 @@ def initialize(config_filename: str, project: str) -> Tuple[Path, Path]:
 
 # endregion
 
+# region simulate
+
+
+def simulate(ngspice_exe: Path) -> str:
+    print(ngspice_exe)
+    return "done"
+
+
+# endregion
+
 
 def main() -> None:
     ngspice_exe, proj_path = initialize(TOML_FILENAME, PROJ_NAME)
-    print(ngspice_exe)
     print(proj_path)
+    finished: str = simulate(ngspice_exe)
+    print(finished)
 
 
 if __name__ == "__main__":
