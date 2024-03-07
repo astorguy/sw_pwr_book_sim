@@ -5,6 +5,8 @@ import tomllib
 from pathlib import Path
 from typing import Any, Tuple
 
+import py4spice as spi
+
 # endregion
 
 # region global variables
@@ -50,8 +52,12 @@ def initialize(config_filename: str, project: str) -> Tuple[Path, Path]:
 # region simulate
 
 
-def simulate(ngspice_exe: Path) -> str:
-    print(ngspice_exe)
+def simulate(ngspice_exe: Path, netlist: Path) -> str:
+
+    # prepare simulate object, print out command, and simulate
+    sim1: spi.Simulate = spi.Simulate(ngspice_exe, netlist)
+    # spi.print_section("Ngspice Command", sim1) # print out command
+    sim1.run()  # run the Ngspice simulation
     return "done"
 
 
@@ -59,9 +65,8 @@ def simulate(ngspice_exe: Path) -> str:
 
 
 def main() -> None:
-    ngspice_exe, proj_path = initialize(TOML_FILENAME, PROJ_NAME)
-    print(proj_path)
-    finished: str = simulate(ngspice_exe)
+    (ngspice_exe, proj_path) = initialize(TOML_FILENAME, PROJ_NAME)
+    finished: str = simulate(ngspice_exe, proj_path / "netlists/top1.cir")
     print(finished)
 
 
