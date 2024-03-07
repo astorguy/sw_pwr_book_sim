@@ -16,22 +16,32 @@ PROJ_NAME: str = "sec_1_04_04"
 # endregion
 
 
-# region read toml file
-def load_toml(file_to_read: Path) -> dict[str, Any]:
-    """read a toml file"""
+# initialize
+def load_config(file_to_read: Path = Path("./config.toml")) -> dict[str, Any]:
+    """Read a config file in toml format and return a dictionary with the data.
+    If Path to file not given, read ./config.toml.
+    """
     with open(file_to_read, "rb") as file:
         toml_data: dict = tomllib.load(file)
     return toml_data
 
 
-# endregion
+def initialize(config_filename: str, project: str) -> Tuple[Path, Path]:
+    """Initialize to get ready for a simulation
 
+    Args:
+        config_filename (str): full path with configuration file
+        project (str): project name; determines table to read in config file
 
-# region initialization
-def initialize(tom_filename: str, project: str) -> Tuple[Path, Path]:
-    config: dict[str, Any] = load_toml(Path(tom_filename))
+    Returns:
+        Tuple[Path, Path]: returns info needed for subsequent steps
+    """
+
+    # Read configuration file and set paths to Ngspice and project
+    config: dict[str, Any] = load_config(Path(config_filename))
     ngspice_exe: Path = Path(config["global"]["ngspice_exe_str"])
-    proj_path: Path = Path(config["sec_1_04_04"]["proj_path_str"])
+    proj_path: Path = Path(config[project]["proj_path_str"])
+
     return (ngspice_exe, proj_path)
 
 
