@@ -1,6 +1,8 @@
 # Top-level settings (common to all projects)
 [global]
 ngspice_exe_str = "/usr/bin/ngspice"
+netlists_dir_str = "netlists"  # relative to proj dir, where netlists will be stored
+results_dir_str = "sim_results"  # rel to proj dir, where sim results will be stored
 
 # Section 1-04-04 Linear Regulator
 [sec_1_04_04]
