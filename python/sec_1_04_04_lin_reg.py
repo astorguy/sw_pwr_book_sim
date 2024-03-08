@@ -12,12 +12,12 @@ import py4spice as spi
 
 # region important constants for reading config file
 
-# This constant is changed for each project. It is only referenced in the
-# config_file_decoding dictionary just below. It is not a global variable.
-MY_PROJECT: str = "sec_1_04_04"  # name matches the project section in the config file
+# This constant is changed for each project. It matches the section name in the
+# config file. It is used to decode the config file and to create the paths
+MY_PROJECT: str = "sec_1_04_04"
 
 # These are keys for the config_file_decoding. They are referenced in other parts
-# of the code. They are the only true global variables in the code.
+# of the code. They are global variables
 CONFIG_NAME: str = "config_name"
 GLOBAL_SECTION: str = "global_section"
 NGSPICE_EXE_KEY: str = "ngspice_exe_key"
@@ -37,32 +37,56 @@ config_file_decoding: dict[str, str] = {
     PROJ_PATH_KEY: "proj_path_str",
     PROJ_SECTION: MY_PROJECT,
 }
+
+# keys for paths dictionary
+PATH_DICT_NGSPICE_EXE: str = "ngspice_exe"
+PATH_DICT_PROJ: str = "proj"
+PATH_DICT_RESULTS: str = "results"
+PATH_DICT_NETLISTS: str = "netlists"
 # endregion
 
 
 # region initialize
-# def define_paths(my_config: dict[str, Any]) -> dict[str, Path]:
-#     """Define all the paths needed for the project
-#     based on the project path"""
+def define_paths(
+    my_config: dict[str, Any], config_decoding: dict[str, str]
+) -> dict[str, Path]:
+    """Define all the paths needed for the project
+    based on the project path"""
 
-#     # Create dictionary of paths, starting with ngspice_exe a
-#     paths: dict[str, Path] = {"ngspice_exe": Path(my_config["GLOBAL"][NGSPICE_EXE_KEY])}
+    # Here are the decodings for the config dictionary, which is from the config file
+    config_global_section: str = config_decoding[GLOBAL_SECTION]
+    config_ngspice_exe_key: str = config_decoding[NGSPICE_EXE_KEY]
+    config_netlists_dir_key: str = config_decoding[NETLISTS_DIR_KEY]
+    config_results_dir_key: str = config_decoding[RESULTS_DIR_KEY]
+    config_proj_path_key: str = config_decoding[PROJ_PATH_KEY]
+    config_proj_section: str = config_decoding[PROJ_SECTION]
 
-#     # Create project path and add to dictionary
-#     proj_path: Path = Path(my_config[PROJ_SECTION][PROJ_PATH_KEY])
-#     paths["proj_path"] = proj_path  # Add to dictionary
+    # Create dictionary of paths, starting with ngspice_exe a
+    paths: dict[str, Path] = {
+        PATH_DICT_NGSPICE_EXE: Path(
+            my_config[config_global_section][config_ngspice_exe_key]
+        )
+    }
 
-#     # Create sim_results directory if doesn't exist
-#     results_path: Path = proj_path / "sim_results"
-#     results_path.mkdir(parents=True, exist_ok=True)
-#     paths["results_path"] = results_path  # Add to dictionary
+    # Create project path and add to dictionary
+    proj_path: Path = Path(my_config[config_proj_section][config_proj_path_key])
+    paths[PATH_DICT_PROJ] = proj_path  # Add to dictionary
 
-#     # Create netlists directory and files if they don't exist
-#     netlists_path: Path = proj_path / "netlists"
-#     netlists_path.mkdir(parents=True, exist_ok=True)  # Create the directory
-#     paths["netlists_path"] = netlists_path  # Add to dictionary
+    # Create netlists directory and files if they don't exist
+    netlists_path: Path = (
+        proj_path / my_config[config_global_section][config_netlists_dir_key]
+    )
+    netlists_path.mkdir(parents=True, exist_ok=True)  # Create the directory
+    paths[PATH_DICT_NETLISTS] = netlists_path  # Add to dictionary
 
-#     return paths
+    # Create sim_results directory if doesn't exist
+    results_path: Path = (
+        proj_path / my_config[config_global_section][config_results_dir_key]
+    )
+    results_path.mkdir(parents=True, exist_ok=True)
+    paths[PATH_DICT_RESULTS] = results_path  # Add to dictionary
+
+    return paths
 
 
 def define_vector_sets() -> list[spi.Vectors]:
@@ -84,8 +108,8 @@ def initialize(config_decoding: dict[str, str]) -> None:
         my_config: dict[str, Any] = tomllib.load(file)
 
     # create dictionary of paths
-    # my_paths: dict[str, Path] = define_paths(my_config, config_decoding)
-    # print(my_paths)
+    my_paths: dict[str, Path] = define_paths(my_config, config_decoding)
+    print(my_paths)
 
     # list_of_vectors: list[spi.Vectors] = define_vector_sets()
 
