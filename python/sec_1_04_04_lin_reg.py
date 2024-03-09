@@ -92,7 +92,7 @@ def initialize(config_decoding: dict[str, str]) -> None:
         my_config: dict[str, Any] = tomllib.load(file)
 
     # define all the paths
-    ngspice_exe1, proj_path, netlists_path, results_path = define_paths(
+    ngspice_exe, proj_path, netlists_path, results_path = define_paths(
         my_config, config_decoding
     )
 
