@@ -80,6 +80,10 @@ def define_vector_sets() -> tuple[spi.Vectors, spi.Vectors]:
     return vec_all, vec_in_out
 
 
+def define_netlists(netlists_path: Path) -> None:
+    print(netlists_path)
+
+
 def initialize(config_decoding: dict[str, str]) -> None:
     """stuff"""
     # read config file and create CONFIG dictionary
@@ -96,6 +100,7 @@ def initialize(config_decoding: dict[str, str]) -> None:
     vec_all, vec_in_out = define_vector_sets()
 
     # create netlist objects
+    define_netlists(netlists_path)
 
 
 # endregion
