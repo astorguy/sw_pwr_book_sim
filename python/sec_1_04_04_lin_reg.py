@@ -49,7 +49,7 @@ PATH_DICT_NETLISTS: str = "netlists"
 # region initialize
 def define_paths(
     my_config: dict[str, Any], config_decoding: dict[str, str]
-) -> dict[str, Path]:
+) -> tuple[Path, Path, Path, Path]:
     """Define all the paths needed for the project
     based on the project path"""
 
@@ -61,32 +61,42 @@ def define_paths(
     config_proj_path_key: str = config_decoding[PROJ_PATH_KEY]
     config_proj_section: str = config_decoding[PROJ_SECTION]
 
+    # # Create dictionary of paths, starting with ngspice_exe a
+    # paths: dict[str, Path] = {
+    #     PATH_DICT_NGSPICE_EXE: Path(
+    #         my_config[config_global_section][config_ngspice_exe_key]
+    #     )
+    # }
+
     # Create dictionary of paths, starting with ngspice_exe a
-    paths: dict[str, Path] = {
-        PATH_DICT_NGSPICE_EXE: Path(
-            my_config[config_global_section][config_ngspice_exe_key]
-        )
-    }
-
-    # Create project path and add to dictionary
+    ngspice_exe: Path = my_config[config_global_section][config_ngspice_exe_key]
     proj_path: Path = Path(my_config[config_proj_section][config_proj_path_key])
-    paths[PATH_DICT_PROJ] = proj_path  # Add to dictionary
-
-    # Create netlists directory and files if they don't exist
     netlists_path: Path = (
         proj_path / my_config[config_global_section][config_netlists_dir_key]
     )
-    netlists_path.mkdir(parents=True, exist_ok=True)  # Create the directory
-    paths[PATH_DICT_NETLISTS] = netlists_path  # Add to dictionary
-
-    # Create sim_results directory if doesn't exist
     results_path: Path = (
         proj_path / my_config[config_global_section][config_results_dir_key]
     )
-    results_path.mkdir(parents=True, exist_ok=True)
-    paths[PATH_DICT_RESULTS] = results_path  # Add to dictionary
 
-    return paths
+    # # Create project path and add to dictionary
+    # proj_path: Path = Path(my_config[config_proj_section][config_proj_path_key])
+    # paths[PATH_DICT_PROJ] = proj_path  # Add to dictionary
+
+    # # Create netlists directory and files if they don't exist
+    # netlists_path: Path = (
+    #     proj_path / my_config[config_global_section][config_netlists_dir_key]
+    # )
+    # netlists_path.mkdir(parents=True, exist_ok=True)  # Create the directory
+    # paths[PATH_DICT_NETLISTS] = netlists_path  # Add to dictionary
+
+    # # Create sim_results directory if doesn't exist
+    # results_path: Path = (
+    #     proj_path / my_config[config_global_section][config_results_dir_key]
+    # )
+    # results_path.mkdir(parents=True, exist_ok=True)
+    # paths[PATH_DICT_RESULTS] = results_path  # Add to dictionary
+
+    return ngspice_exe, proj_path, netlists_path, results_path
 
 
 def define_vector_sets() -> tuple[spi.Vectors, spi.Vectors]:
@@ -107,12 +117,14 @@ def initialize(config_decoding: dict[str, str]) -> None:
     with open(config_name, "rb") as file:
         my_config: dict[str, Any] = tomllib.load(file)
 
-    # create dictionary of paths
-    my_paths: dict[str, Path] = define_paths(my_config, config_decoding)
+    # # create dictionary of paths
+    # my_paths: dict[str, Path] = define_paths(my_config, config_decoding)
+
+    ngspice_exe1, proj_path, netlists_path, results_path = define_paths(
+        my_config, config_decoding
+    )
 
     vec_all, vec_in_out = define_vector_sets()
-    print(f"vec_all: {vec_all}")
-    print(f"vec_in_out: {vec_in_out}")
 
 
 # endregion
