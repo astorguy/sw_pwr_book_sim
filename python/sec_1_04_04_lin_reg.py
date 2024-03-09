@@ -89,15 +89,15 @@ def define_paths(
     return paths
 
 
-def define_vector_sets() -> list[spi.Vectors]:
+def define_vector_sets() -> tuple[spi.Vectors, spi.Vectors]:
     """Define all the vector sets for simulation and post-simulation analysis
 
     Returns:
-        list[spi.Vectors]: list of all the vector sets defined here
+        tuple[spi.Vectors, spi.Vectors]: tuple of all the vector sets defined here
     """
     vec_all = spi.Vectors("all")
     vec_in_out = spi.Vectors("in out")
-    return [vec_all, vec_in_out]
+    return vec_all, vec_in_out
 
 
 def initialize(config_decoding: dict[str, str]) -> None:
@@ -109,9 +109,10 @@ def initialize(config_decoding: dict[str, str]) -> None:
 
     # create dictionary of paths
     my_paths: dict[str, Path] = define_paths(my_config, config_decoding)
-    print(my_paths)
 
-    # list_of_vectors: list[spi.Vectors] = define_vector_sets()
+    vec_all, vec_in_out = define_vector_sets()
+    print(f"vec_all: {vec_all}")
+    print(f"vec_in_out: {vec_in_out}")
 
 
 # endregion
