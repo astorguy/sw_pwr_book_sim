@@ -10,7 +10,7 @@ import py4spice as spi
 # endregion
 
 
-# region Important constants for reading config file
+# region Constants
 
 # This constant is set for each project. It matches the section name in the
 # config file (toml). It is used to decode the config file and to create the paths
