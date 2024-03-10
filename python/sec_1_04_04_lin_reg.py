@@ -116,7 +116,7 @@ def initialize(
     # create vector sets dictionary
     vectors_dict: dict[str, spi.Vectors] = define_vector_sets(Key)
 
-    # # create netlist objects
+    # create netlist objects
     # define_netlists(netlists_path)
 
     return paths_dict, vectors_dict
