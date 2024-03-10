@@ -3,7 +3,7 @@
 # region Imports
 import tomllib
 from pathlib import Path
-from typing import Any
+from typing import Any, Type
 
 import py4spice as spi
 
@@ -12,8 +12,8 @@ import py4spice as spi
 
 # region Important constants for reading config file
 
-# This constant is changed for each project. It matches the section name in the
-# config file. It is used to decode the config file and to create the paths
+# This constant is set for each project. It matches the section name in the
+# config file (toml). It is used to decode the config file and to create the paths
 MY_PROJECT: str = "sec_1_04_04"
 
 
@@ -45,7 +45,7 @@ config_file_decoding = {
 
 # region Initialize
 def define_paths(
-    my_config: dict[str, str], config_decoding: dict[str, str]
+    my_config: dict[Any, Any], config_decoding: dict[str, str], Key: Type[Key]
 ) -> tuple[Path, Path, Path, Path]:
     """Define all the paths needed for the project"""
 
@@ -58,8 +58,6 @@ def define_paths(
     config_proj_section: str = config_decoding[Key.PROJ_SECTION]
 
     # Create paths based on the config dictionary
-    fred: str = my_config["global"]["ngspice_exe_str"]
-    print(f"fred = {fred}")
     ngspice_exe: Path = Path(my_config[config_global_section][config_ngspice_exe_key])
     proj_path: Path = Path(my_config[config_proj_section][config_proj_path_key])
     netlists_path: Path = (
@@ -87,7 +85,7 @@ def define_netlists(netlists_path: Path) -> None:
     print(netlists_path)
 
 
-def initialize(config_decoding: dict[str, str]) -> None:
+def initialize(config_decoding: dict[str, str], Key: Type[Key]) -> None:
     """stuff"""
     # read config file and create CONFIG dictionary
     config_name: Path = Path(config_decoding[Key.CONFIG_NAME])
@@ -96,8 +94,12 @@ def initialize(config_decoding: dict[str, str]) -> None:
 
     # define all the paths
     ngspice_exe, proj_path, netlists_path, results_path = define_paths(
-        my_config, config_decoding
+        my_config, config_decoding, Key
     )
+    print(f"ngspice_exe = {ngspice_exe}")
+    print(f"proj_path = {proj_path}")
+    print(f"netlists_path = {netlists_path}")
+    print(f"results_path = {results_path}")
 
     # # define all the vector sets
     # vec_all, vec_in_out = define_vector_sets()
@@ -123,8 +125,7 @@ def simulate(ngspice_exe: Path, netlist: Path) -> str:
 
 
 def main() -> None:
-    print("hello")
-    initialize(config_file_decoding)
+    initialize(config_file_decoding, Key)
     # finished: str = simulate(ngspice_exe, proj_path / "netlists/top1.cir")
     # print(finished)
 
