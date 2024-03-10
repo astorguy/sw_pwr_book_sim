@@ -38,6 +38,7 @@ class Key:
     # Keys for the vectors_dict
     VEC_ALL = "vec_all"
     VEC_IN_OUT = "vec_in_out"
+    VEC_OUT = "vec_out"
 
 
 # Dictionary for decoding the config file. Do not change values unless changing the
@@ -87,22 +88,22 @@ def define_paths(
     }
 
 
-def define_vector_sets() -> tuple[spi.Vectors, spi.Vectors]:
-    """Define all the vector sets for simulation and post-simulation analysis
-
-    Returns:
-        tuple[spi.Vectors, spi.Vectors]: tuple of all the vector sets defined here
-    """
-    vec_all = spi.Vectors("all")
-    vec_in_out = spi.Vectors("in out")
-    return vec_all, vec_in_out
+def define_vector_sets(Key: Type[Key]) -> dict[str, spi.Vectors]:
+    """Define a dictionary vector sets for simulation and post-simulation analysis"""
+    return {
+        Key.VEC_ALL: spi.Vectors("all"),
+        Key.VEC_IN_OUT: spi.Vectors("in out"),
+        Key.VEC_OUT: spi.Vectors("out"),
+    }
 
 
 def define_netlists(netlists_path: Path) -> None:
     print(netlists_path)
 
 
-def initialize(config_decoding: dict[str, str], Key: Type[Key]) -> dict[str, Path]:
+def initialize(
+    config_decoding: dict[str, str], Key: Type[Key]
+) -> tuple[dict[str, Path], dict[str, spi.Vectors]]:
     """stuff"""
     # read config file and create CONFIG dictionary
     config_name: Path = Path(config_decoding[Key.CONFIG_NAME])
@@ -112,13 +113,13 @@ def initialize(config_decoding: dict[str, str], Key: Type[Key]) -> dict[str, Pat
     # define all the paths
     paths_dict: dict[str, Path] = define_paths(my_config, config_decoding, Key)
 
-    # # define all the vector sets
-    # vec_all, vec_in_out = define_vector_sets()
+    # create vector sets dictionary
+    vectors_dict: dict[str, spi.Vectors] = define_vector_sets(Key)
 
     # # create netlist objects
     # define_netlists(netlists_path)
 
-    return paths_dict
+    return paths_dict, vectors_dict
 
 
 # endregion
@@ -139,7 +140,8 @@ def simulate(ngspice_exe: Path, netlist: Path) -> str:
 
 def main() -> None:
     # Initialize
-    paths_dict: dict[str, Path] = initialize(config_file_decoding, Key)
+    paths_dict, vectors_dict = initialize(config_file_decoding, Key)
+    print(vectors_dict[Key.VEC_IN_OUT].list_out())
 
     # Simulate
     finished: str = simulate(
