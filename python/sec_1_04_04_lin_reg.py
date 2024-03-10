@@ -35,6 +35,10 @@ class Key:
     NETLISTS_PATH = "netlists_path"
     RESULTS_PATH = "results_path"
 
+    # Keys for the vectors_dict
+    VEC_ALL = "vec_all"
+    VEC_IN_OUT = "vec_in_out"
+
 
 # Dictionary for decoding the config file. Do not change values unless changing the
 # section or key names in the config file.
@@ -134,12 +138,10 @@ def simulate(ngspice_exe: Path, netlist: Path) -> str:
 
 
 def main() -> None:
+    # Initialize
     paths_dict: dict[str, Path] = initialize(config_file_decoding, Key)
 
-    print(f"ngspice_exe = {paths_dict[Key.NGSPICE_EXE]}")
-    print(f"proj_path = {paths_dict[Key.PROJ_PATH]}")
-    print(f"netlists_path = {paths_dict[Key.NETLISTS_PATH]}")
-    print(f"results_path = {paths_dict[Key.RESULTS_PATH]}")
+    # Simulate
     finished: str = simulate(
         paths_dict[Key.NGSPICE_EXE], paths_dict[Key.NETLISTS_PATH] / "top1.cir"
     )
