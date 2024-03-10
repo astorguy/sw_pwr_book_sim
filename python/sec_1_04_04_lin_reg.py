@@ -20,6 +20,7 @@ MY_PROJECT: str = "sec_1_04_04"
 class Key:
     """Keys for dictionaries"""
 
+    # Keys for decoding the config file
     CONFIG_NAME = "config_name"
     GLOBAL_SECTION = "global_section"
     NGSPICE_EXE_KEY = "ngspice_exe_str"
@@ -27,6 +28,12 @@ class Key:
     RESULTS_DIR_KEY = "results_dir_str"
     PROJ_PATH_KEY = "proj_path_str"
     PROJ_SECTION = "proj_section"
+
+    # Keys for the paths_dict
+    NGSPICE_EXE = "ngspice_exe"
+    PROJ_PATH = "proj_path"
+    NETLISTS_PATH = "netlists_path"
+    RESULTS_PATH = "results_path"
 
 
 # Dictionary for decoding the config file. Do not change values unless changing the
@@ -46,7 +53,7 @@ config_file_decoding = {
 # region Initialize
 def define_paths(
     my_config: dict[Any, Any], config_decoding: dict[str, str], Key: Type[Key]
-) -> tuple[Path, Path, Path, Path]:
+) -> dict[str, Path]:
     """Define all the paths needed for the project"""
 
     # Here are the decodings for the config dictionary, which is from the config file
@@ -67,7 +74,13 @@ def define_paths(
         proj_path / my_config[config_global_section][config_results_dir_key]
     )
 
-    return ngspice_exe, proj_path, netlists_path, results_path
+    # create and return the paths dictionary
+    return {
+        Key.NGSPICE_EXE: ngspice_exe,
+        Key.PROJ_PATH: proj_path,
+        Key.NETLISTS_PATH: netlists_path,
+        Key.RESULTS_PATH: results_path,
+    }
 
 
 def define_vector_sets() -> tuple[spi.Vectors, spi.Vectors]:
@@ -85,7 +98,7 @@ def define_netlists(netlists_path: Path) -> None:
     print(netlists_path)
 
 
-def initialize(config_decoding: dict[str, str], Key: Type[Key]) -> None:
+def initialize(config_decoding: dict[str, str], Key: Type[Key]) -> dict[str, Path]:
     """stuff"""
     # read config file and create CONFIG dictionary
     config_name: Path = Path(config_decoding[Key.CONFIG_NAME])
@@ -93,19 +106,15 @@ def initialize(config_decoding: dict[str, str], Key: Type[Key]) -> None:
         my_config: dict[str, Any] = tomllib.load(file)
 
     # define all the paths
-    ngspice_exe, proj_path, netlists_path, results_path = define_paths(
-        my_config, config_decoding, Key
-    )
-    print(f"ngspice_exe = {ngspice_exe}")
-    print(f"proj_path = {proj_path}")
-    print(f"netlists_path = {netlists_path}")
-    print(f"results_path = {results_path}")
+    paths_dict: dict[str, Path] = define_paths(my_config, config_decoding, Key)
 
     # # define all the vector sets
     # vec_all, vec_in_out = define_vector_sets()
 
     # # create netlist objects
     # define_netlists(netlists_path)
+
+    return paths_dict
 
 
 # endregion
@@ -125,9 +134,16 @@ def simulate(ngspice_exe: Path, netlist: Path) -> str:
 
 
 def main() -> None:
-    initialize(config_file_decoding, Key)
-    # finished: str = simulate(ngspice_exe, proj_path / "netlists/top1.cir")
-    # print(finished)
+    paths_dict: dict[str, Path] = initialize(config_file_decoding, Key)
+
+    print(f"ngspice_exe = {paths_dict[Key.NGSPICE_EXE]}")
+    print(f"proj_path = {paths_dict[Key.PROJ_PATH]}")
+    print(f"netlists_path = {paths_dict[Key.NETLISTS_PATH]}")
+    print(f"results_path = {paths_dict[Key.RESULTS_PATH]}")
+    finished: str = simulate(
+        paths_dict[Key.NGSPICE_EXE], paths_dict[Key.NETLISTS_PATH] / "top1.cir"
+    )
+    print(finished)
 
 
 if __name__ == "__main__":
