@@ -35,6 +35,9 @@ class Key:
     NETLISTS_PATH = "netlists_path"
     RESULTS_PATH = "results_path"
 
+    # Keys for the netlists_dict
+    BLANKLINE = "blankline"
+
     # Keys for the vectors_dict
     VEC_ALL = "vec_all"
     VEC_IN_OUT = "vec_in_out"
@@ -88,6 +91,20 @@ def define_paths(
     }
 
 
+def define_netlists(
+    paths_dict: dict[str, Path], Key: Type[Key]
+) -> dict[str, spi.Netlist]:
+    """Create and return dictionary of netlist objects"""
+
+    netlists_path: Path = paths_dict[Key.NETLISTS_PATH]
+
+    blankline = spi.Netlist("")  # create a blank line; used for spacing
+
+    # add blankline netlist object as first item in the netlist dictionary
+    netlist_dict: dict[str, spi.Netlist] = {Key.BLANKLINE: blankline}
+    return netlist_dict
+
+
 def define_vector_sets(Key: Type[Key]) -> dict[str, spi.Vectors]:
     """Define a dictionary vector sets for simulation and post-simulation analysis"""
     return {
@@ -97,13 +114,9 @@ def define_vector_sets(Key: Type[Key]) -> dict[str, spi.Vectors]:
     }
 
 
-def define_netlists(netlists_path: Path) -> None:
-    print(netlists_path)
-
-
 def initialize(
     config_decoding: dict[str, str], Key: Type[Key]
-) -> tuple[dict[str, Path], dict[str, spi.Vectors]]:
+) -> tuple[dict[str, Path], dict[str, spi.Netlist], dict[str, spi.Vectors]]:
     """stuff"""
     # read config file and create CONFIG dictionary
     config_name: Path = Path(config_decoding[Key.CONFIG_NAME])
@@ -113,13 +126,13 @@ def initialize(
     # define all the paths
     paths_dict: dict[str, Path] = define_paths(my_config, config_decoding, Key)
 
+    # create netlist objects
+    netlists_dict = define_netlists(paths_dict, Key)
+
     # create vector sets dictionary
     vectors_dict: dict[str, spi.Vectors] = define_vector_sets(Key)
 
-    # create netlist objects
-    # define_netlists(netlists_path)
-
-    return paths_dict, vectors_dict
+    return paths_dict, netlists_dict, vectors_dict
 
 
 # endregion
@@ -140,7 +153,8 @@ def simulate(ngspice_exe: Path, netlist: Path) -> str:
 
 def main() -> None:
     # Initialize
-    paths_dict, vectors_dict = initialize(config_file_decoding, Key)
+    paths_dict, netlists_dict, vectors_dict = initialize(config_file_decoding, Key)
+    print(netlists_dict[Key.BLANKLINE])
     print(vectors_dict[Key.VEC_IN_OUT].list_out())
 
     # Simulate
