@@ -1,4 +1,4 @@
-"""Example from Power Supply book: Section 1.04.04 Linear Regulator"""
+"""From Power Supply book: Section 1.04.04 Linear Regulator"""
 
 # region Imports
 import tomllib
@@ -27,6 +27,7 @@ class Key:
     NETLISTS_DIR_KEY = "netlists_dir_str"
     RESULTS_DIR_KEY = "results_dir_str"
     PROJ_PATH_KEY = "proj_path_str"
+    DESCRIPTION_KEY = "description"
     PROJ_SECTION = "proj_section"
 
     # Keys for the paths_dict
@@ -37,6 +38,8 @@ class Key:
 
     # Keys for the netlists_dict
     BLANKLINE = "blankline"
+    TITLE = "title"
+    END_LINE = "end_line"
 
     # Keys for the vectors_dict
     VEC_ALL = "vec_all"
@@ -91,18 +94,46 @@ def define_paths(
     }
 
 
+def special_netlists(
+    netlist_dict: dict[str, spi.Netlist], proj_description: str, Key: Type[Key]
+) -> dict[str, spi.Netlist]:
+    """Create special netlist objects and add to netlist dictionary"""
+
+    # create blank line for spacing and add to netlist dictionary
+    netlist_dict[Key.BLANKLINE] = spi.Netlist("")
+
+    # create title netlist object and add to netlist dictionary
+    netlist_dict[Key.TITLE] = spi.Netlist(proj_description)
+
+    # create end statement netlist object and add to netlist dictionary
+    netlist_dict[Key.END_LINE] = spi.Netlist(".end")
+
+    return netlist_dict
+
+
+def netlists_from_files(
+    netlist_dict: dict[str, spi.Netlist], netlist_path: Path, Key: Type[Key]
+) -> dict[str, spi.Netlist]:
+    print(netlist_path)
+    return netlist_dict
+
+
 def define_netlists(
-    paths_dict: dict[str, Path], Key: Type[Key]
+    paths_dict: dict[str, Path], Key: Type[Key], proj_description: str
 ) -> dict[str, spi.Netlist]:
     """Create and return dictionary of netlist objects"""
 
     netlists_path: Path = paths_dict[Key.NETLISTS_PATH]
 
-    blankline = spi.Netlist("")  # create a blank line; used for spacing
+    netlists_dict: dict[str, spi.Netlist] = {}  # create empty netlist dictionary
+    netlists_dict = special_netlists(netlists_dict, proj_description, Key)
+    netlists_dict = netlists_from_files(netlists_dict, netlists_path, Key)
 
-    # add blankline netlist object as first item in the netlist dictionary
-    netlist_dict: dict[str, spi.Netlist] = {Key.BLANKLINE: blankline}
-    return netlist_dict
+    # Print keys of the dictionary
+    for key in netlists_dict.keys():
+        print(key)
+
+    return netlists_dict
 
 
 def define_vector_sets(Key: Type[Key]) -> dict[str, spi.Vectors]:
@@ -123,11 +154,16 @@ def initialize(
     with open(config_name, "rb") as file:
         my_config: dict[str, Any] = tomllib.load(file)
 
-    # define all the paths
+    # get the project description from config file
+    proj_description: str = my_config[config_file_decoding[Key.PROJ_SECTION]][
+        Key.DESCRIPTION_KEY
+    ]
+
+    # create paths dictionary
     paths_dict: dict[str, Path] = define_paths(my_config, config_decoding, Key)
 
-    # create netlist objects
-    netlists_dict = define_netlists(paths_dict, Key)
+    # create netlists dictionary
+    netlists_dict = define_netlists(paths_dict, Key, proj_description)
 
     # create vector sets dictionary
     vectors_dict: dict[str, spi.Vectors] = define_vector_sets(Key)
