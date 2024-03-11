@@ -238,7 +238,33 @@ def simulate_easy(ngspice_exe: Path, netlist: Path) -> str:
     return "done"
 
 
-def analyze_results() -> None:
+def create_control_section(list_of_analyses1: list[spi.Analyses]) -> spi.Netlist:
+
+    my_control1 = spi.Control()  # create 'my_control' object
+    my_control1.insert_lines(["listing"])  # cmd to list out netlist
+    for analysis in list_of_analyses1:  # statements for all analyses
+        my_control1.insert_lines(analysis.lines_for_cntl())
+    control1: spi.Netlist = spi.Netlist(str(my_control1))  # create netlist object
+
+    return control1
+
+
+def simulate(
+    paths_dict: dict[str, Path],
+    netlists_dict: dict[str, spi.Netlist],
+    list_of_analyses: list[spi.Analyses],
+) -> list[spi.SimResults]:
+
+    # create control section
+    control1: spi.Netlist = create_control_section(list_of_analyses)
+    # create empty list for simulation results
+    sim_results: list[spi.SimResults] = []
+    return sim_results
+
+
+def analyze_results(
+    sim_results: list[spi.SimResults], vectors_dict: dict[str, spi.Vectors]
+) -> None:
     pass
 
 
@@ -248,18 +274,22 @@ def analyze_results() -> None:
 def main() -> None:
     # Initialize
     paths_dict, netlists_dict, vectors_dict = initialize(config_file_decoding)
-    print(netlists_dict[Key.TITLE])
 
+    # Define analyses
     list_of_analyses: list[spi.Analyses] = define_analyses(paths_dict, vectors_dict)
     print(list_of_analyses)
 
     # Simulate
-    finished: str = simulate_easy(
-        paths_dict[Key.NGSPICE_EXE], paths_dict[Key.NETLISTS_PATH] / "top1.cir"
+    sim_results: list[spi.SimResults] = simulate(
+        paths_dict, netlists_dict, list_of_analyses
     )
-    print(finished)
 
-    analyze_results()
+    # finished: str = simulate_easy(
+    #     paths_dict[Key.NGSPICE_EXE], paths_dict[Key.NETLISTS_PATH] / "top1.cir"
+    # )
+    # print(finished)
+
+    analyze_results(sim_results, vectors_dict)
 
 
 if __name__ == "__main__":
