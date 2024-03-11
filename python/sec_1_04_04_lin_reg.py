@@ -72,7 +72,7 @@ config_file_decoding = {
 
 # region Initialize
 def define_paths(
-    my_config: dict[Any, Any], config_decoding: dict[str, str], Key: Type[Key]
+    my_config: dict[Any, Any], config_decoding: dict[str, str]
 ) -> dict[str, Path]:
     """Define all the paths needed for the project"""
 
@@ -104,7 +104,7 @@ def define_paths(
 
 
 def special_netlists(
-    netlist_dict: dict[str, spi.Netlist], proj_description: str, Key: Type[Key]
+    netlist_dict: dict[str, spi.Netlist], proj_description: str
 ) -> dict[str, spi.Netlist]:
     """Create special netlist objects and add to netlist dictionary"""
 
@@ -121,7 +121,7 @@ def special_netlists(
 
 
 def netlists_from_files(
-    netlist_dict: dict[str, spi.Netlist], netlist_path: Path, Key: Type[Key]
+    netlist_dict: dict[str, spi.Netlist], netlist_path: Path
 ) -> dict[str, spi.Netlist]:
     """read in netlists from files and add to netlist dictionary"""
 
@@ -138,7 +138,7 @@ def netlists_from_files(
 
 
 def prepare_dut(
-    netlist_dict: dict[str, spi.Netlist], netlists_path: Path, Key: Type[Key]
+    netlist_dict: dict[str, spi.Netlist], netlists_path: Path
 ) -> dict[str, spi.Netlist]:
     """Prepare dut.cir from raw_kicad.cir"""
 
@@ -155,21 +155,21 @@ def prepare_dut(
 
 
 def define_netlists(
-    paths_dict: dict[str, Path], Key: Type[Key], proj_description: str
+    paths_dict: dict[str, Path], proj_description: str
 ) -> dict[str, spi.Netlist]:
     """Create and return dictionary of netlist objects"""
 
     netlists_path: Path = paths_dict[Key.NETLISTS_PATH]
 
     netlists_dict: dict[str, spi.Netlist] = {}  # create empty netlist dictionary
-    netlists_dict = special_netlists(netlists_dict, proj_description, Key)
-    netlists_dict = netlists_from_files(netlists_dict, netlists_path, Key)
-    netlists_dict = prepare_dut(netlists_dict, netlists_path, Key)
+    netlists_dict = special_netlists(netlists_dict, proj_description)
+    netlists_dict = netlists_from_files(netlists_dict, netlists_path)
+    netlists_dict = prepare_dut(netlists_dict, netlists_path)
 
     return netlists_dict
 
 
-def define_vector_sets(Key: Type[Key]) -> dict[str, spi.Vectors]:
+def define_vector_sets() -> dict[str, spi.Vectors]:
     """Define a dictionary vector sets for simulation and post-simulation analysis"""
     return {
         Key.VEC_ALL: spi.Vectors("all"),
@@ -179,7 +179,7 @@ def define_vector_sets(Key: Type[Key]) -> dict[str, spi.Vectors]:
 
 
 def initialize(
-    config_decoding: dict[str, str], Key: Type[Key]
+    config_decoding: dict[str, str]
 ) -> tuple[dict[str, Path], dict[str, spi.Netlist], dict[str, spi.Vectors]]:
     """stuff"""
     # read config file and create CONFIG dictionary
@@ -193,13 +193,13 @@ def initialize(
     ]
 
     # create paths dictionary
-    paths_dict: dict[str, Path] = define_paths(my_config, config_decoding, Key)
+    paths_dict: dict[str, Path] = define_paths(my_config, config_decoding)
 
     # create netlists dictionary
-    netlists_dict = define_netlists(paths_dict, Key, proj_description)
+    netlists_dict = define_netlists(paths_dict, proj_description)
 
     # create vector sets dictionary
-    vectors_dict: dict[str, spi.Vectors] = define_vector_sets(Key)
+    vectors_dict: dict[str, spi.Vectors] = define_vector_sets()
 
     return paths_dict, netlists_dict, vectors_dict
 
@@ -222,7 +222,7 @@ def simulate(ngspice_exe: Path, netlist: Path) -> str:
 
 def main() -> None:
     # Initialize
-    paths_dict, netlists_dict, vectors_dict = initialize(config_file_decoding, Key)
+    paths_dict, netlists_dict, vectors_dict = initialize(config_file_decoding)
     print(paths_dict[Key.NGSPICE_EXE])
     print(netlists_dict[Key.TITLE])
     print(vectors_dict[Key.VEC_IN_OUT].list_out())
