@@ -234,15 +234,6 @@ def define_analyses(
     return list_of_analyses1
 
 
-def simulate_easy(ngspice_exe: Path, netlist: Path) -> str:
-
-    # prepare simulate object, print out command, and simulate
-    sim1: spi.Simulate = spi.Simulate(ngspice_exe, netlist)
-    # spi.print_section("Ngspice Command", sim1) # print out command
-    sim1.run()  # run the Ngspice simulation
-    return "done"
-
-
 def create_control_section(list_of_analyses1: list[spi.Analyses]) -> spi.Netlist:
 
     my_control1 = spi.Control()  # create 'my_control' object
@@ -287,14 +278,13 @@ def execute_ngspice(ngspice_exe: Path, netlist: Path) -> str:
     sim1.run()  # run the Ngspice simulation
     return "done"
 
-def convert_to_numpy(sim_results: list[spi.SimResults]) -> None:
+
+def convert_to_numpy(list_of_analyses: list[spi.Analyses]) -> list[spi.SimResults]:
     # convert the raw results into list of SimResults objects
-    my_sim_results1: list[spi.SimResults] = [
-    spi.SimResults.from_file(analysis.cmd_type, analysis.results_filename)
-    for analysis in list_of_analyses1
-]
-# give each SimResults object a more descriptive name
-op1_results, tf1_results = my_sim_results1
+    return [
+        spi.SimResults.from_file(analysis.cmd_type, analysis.results_filename)
+        for analysis in list_of_analyses
+    ]
 
 
 def simulate(
@@ -318,14 +308,17 @@ def simulate(
     print(finished)
 
     # create empty list for simulation results
-    sim_results: list[spi.SimResults] = []
+    sim_results: list[spi.SimResults] = convert_to_numpy(list_of_analyses)
+
     return sim_results, netlists_dict
 
 
 def analyze_results(
     sim_results: list[spi.SimResults], vectors_dict: dict[str, spi.Vectors]
 ) -> None:
-    pass
+    # give each SimResults object a more descriptive name
+    op1_results, tf1_results = sim_results
+    spi.print_section("Operating Point Results", op1_results.print_table())
 
 
 # endregion
@@ -337,15 +330,9 @@ def main() -> None:
 
     # Define analyses
     list_of_analyses: list[spi.Analyses] = define_analyses(paths_dict, vectors_dict)
-    print(list_of_analyses)
 
     # Simulate
     sim_results, netlists_dict = simulate(paths_dict, netlists_dict, list_of_analyses)
-
-    # finished: str = simulate_easy(
-    #     paths_dict[Key.NGSPICE_EXE], paths_dict[Key.NETLISTS_PATH] / "top1.cir"
-    # )
-    # print(finished)
 
     analyze_results(sim_results, vectors_dict)
 
