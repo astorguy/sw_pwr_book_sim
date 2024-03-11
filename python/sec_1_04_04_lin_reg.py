@@ -318,7 +318,12 @@ def analyze_results(
 ) -> None:
     # give each SimResults object a more descriptive name
     op1_results, tf1_results = sim_results
+
+    # diaplay results for operating point analysis
     spi.print_section("Operating Point Results", op1_results.print_table())
+
+    # display results for small signal transfer function analysis
+    spi.print_section("Transfer Function Results", tf1_results.print_table())
 
 
 # endregion
