@@ -257,6 +257,7 @@ def simulate(
 
     # create control section
     control1: spi.Netlist = create_control_section(list_of_analyses)
+    
     # create empty list for simulation results
     sim_results: list[spi.SimResults] = []
     return sim_results
