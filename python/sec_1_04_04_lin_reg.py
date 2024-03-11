@@ -48,6 +48,7 @@ class Key:
     STIMULUS3 = "stimulus3"
     SUPPLIES = "supplies"
     MODELS = "models"
+    DUT = "dut"
 
     # Keys for the vectors_dict
     VEC_ALL = "vec_all"
@@ -111,7 +112,7 @@ def special_netlists(
     netlist_dict[Key.BLANKLINE] = spi.Netlist("")
 
     # create title netlist object and add to netlist dictionary
-    netlist_dict[Key.TITLE] = spi.Netlist(proj_description)
+    netlist_dict[Key.TITLE] = spi.Netlist(f"* {proj_description}")
 
     # create end statement netlist object and add to netlist dictionary
     netlist_dict[Key.END_LINE] = spi.Netlist(".end")
@@ -136,6 +137,23 @@ def netlists_from_files(
     return netlist_dict
 
 
+def prepare_dut(
+    netlist_dict: dict[str, spi.Netlist], netlists_path: Path, Key: Type[Key]
+) -> dict[str, spi.Netlist]:
+    """Prepare dut.cir from raw_kicad.cir"""
+
+    dut: spi.Netlist = spi.Netlist(netlists_path / "raw_kicad.cir")
+    dut.del_line_starts_with(".title")  # delete first line (title)
+    dut.del_line_starts_with(".end")  # delete last line (.end)
+    dut.del_line_starts_with(".include")  # delete first  .include line
+    dut.del_line_starts_with(".include")  # delete second .include line
+    dut.del_slash()  # delete forward slashes from node names
+
+    netlist_dict[Key.DUT] = dut  # add to netlist dictionary
+
+    return netlist_dict
+
+
 def define_netlists(
     paths_dict: dict[str, Path], Key: Type[Key], proj_description: str
 ) -> dict[str, spi.Netlist]:
@@ -146,10 +164,7 @@ def define_netlists(
     netlists_dict: dict[str, spi.Netlist] = {}  # create empty netlist dictionary
     netlists_dict = special_netlists(netlists_dict, proj_description, Key)
     netlists_dict = netlists_from_files(netlists_dict, netlists_path, Key)
-
-    # Print keys of the dictionary
-    for key in netlists_dict.keys():
-        print(key)
+    netlists_dict = prepare_dut(netlists_dict, netlists_path, Key)
 
     return netlists_dict
 
@@ -208,14 +223,15 @@ def simulate(ngspice_exe: Path, netlist: Path) -> str:
 def main() -> None:
     # Initialize
     paths_dict, netlists_dict, vectors_dict = initialize(config_file_decoding, Key)
-    print(netlists_dict[Key.BLANKLINE])
+    print(paths_dict[Key.NGSPICE_EXE])
+    print(netlists_dict[Key.TITLE])
     print(vectors_dict[Key.VEC_IN_OUT].list_out())
 
     # Simulate
-    finished: str = simulate(
-        paths_dict[Key.NGSPICE_EXE], paths_dict[Key.NETLISTS_PATH] / "top1.cir"
-    )
-    print(finished)
+    # finished: str = simulate(
+    #     paths_dict[Key.NGSPICE_EXE], paths_dict[Key.NETLISTS_PATH] / "top1.cir"
+    # )
+    # print(finished)
 
 
 if __name__ == "__main__":
