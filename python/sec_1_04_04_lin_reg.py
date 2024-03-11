@@ -287,6 +287,15 @@ def execute_ngspice(ngspice_exe: Path, netlist: Path) -> str:
     sim1.run()  # run the Ngspice simulation
     return "done"
 
+def convert_to_numpy(sim_results: list[spi.SimResults]) -> None:
+    # convert the raw results into list of SimResults objects
+    my_sim_results1: list[spi.SimResults] = [
+    spi.SimResults.from_file(analysis.cmd_type, analysis.results_filename)
+    for analysis in list_of_analyses1
+]
+# give each SimResults object a more descriptive name
+op1_results, tf1_results = my_sim_results1
+
 
 def simulate(
     paths_dict: dict[str, Path],
