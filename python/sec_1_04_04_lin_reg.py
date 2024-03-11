@@ -49,6 +49,8 @@ class Key:
     SUPPLIES = "supplies"
     MODELS = "models"
     DUT = "dut"
+    CONTROL1 = "control1"
+    TOP1 = "top1"
 
     # Keys for the vectors_dict
     VEC_ALL = "vec_all"
@@ -104,41 +106,41 @@ def define_paths(
 
 
 def special_netlists(
-    netlist_dict: dict[str, spi.Netlist], proj_description: str
+    netlists_dict: dict[str, spi.Netlist], proj_description: str
 ) -> dict[str, spi.Netlist]:
     """Create special netlist objects and add to netlist dictionary"""
 
     # create blank line for spacing and add to netlist dictionary
-    netlist_dict[Key.BLANKLINE] = spi.Netlist("")
+    netlists_dict[Key.BLANKLINE] = spi.Netlist("")
 
     # create title netlist object and add to netlist dictionary
-    netlist_dict[Key.TITLE] = spi.Netlist(f"* {proj_description}")
+    netlists_dict[Key.TITLE] = spi.Netlist(f"* {proj_description}")
 
     # create end statement netlist object and add to netlist dictionary
-    netlist_dict[Key.END_LINE] = spi.Netlist(".end")
+    netlists_dict[Key.END_LINE] = spi.Netlist(".end")
 
-    return netlist_dict
+    return netlists_dict
 
 
 def netlists_from_files(
-    netlist_dict: dict[str, spi.Netlist], netlist_path: Path
+    netlists_dict: dict[str, spi.Netlist], netlist_path: Path
 ) -> dict[str, spi.Netlist]:
     """read in netlists from files and add to netlist dictionary"""
 
-    netlist_dict[Key.LOAD1] = spi.Netlist(netlist_path / "load_resistive.cir")
-    netlist_dict[Key.LOAD2] = spi.Netlist(netlist_path / "load_resistive.cir")
-    netlist_dict[Key.LOAD3] = spi.Netlist(netlist_path / "load_current_pulse.cir")
-    netlist_dict[Key.STIMULUS1] = spi.Netlist(netlist_path / "stimulus_15v_dc.cir")
-    netlist_dict[Key.STIMULUS2] = spi.Netlist(netlist_path / "stimulus_15v_ramp.cir")
-    netlist_dict[Key.STIMULUS3] = spi.Netlist(netlist_path / "stimulus_15v_dc.cir")
-    netlist_dict[Key.SUPPLIES] = spi.Netlist(netlist_path / "supplies.cir")
-    netlist_dict[Key.MODELS] = spi.Netlist(netlist_path / "models.cir")
+    netlists_dict[Key.LOAD1] = spi.Netlist(netlist_path / "load_resistive.cir")
+    netlists_dict[Key.LOAD2] = spi.Netlist(netlist_path / "load_resistive.cir")
+    netlists_dict[Key.LOAD3] = spi.Netlist(netlist_path / "load_current_pulse.cir")
+    netlists_dict[Key.STIMULUS1] = spi.Netlist(netlist_path / "stimulus_15v_dc.cir")
+    netlists_dict[Key.STIMULUS2] = spi.Netlist(netlist_path / "stimulus_15v_ramp.cir")
+    netlists_dict[Key.STIMULUS3] = spi.Netlist(netlist_path / "stimulus_15v_dc.cir")
+    netlists_dict[Key.SUPPLIES] = spi.Netlist(netlist_path / "supplies.cir")
+    netlists_dict[Key.MODELS] = spi.Netlist(netlist_path / "models.cir")
 
-    return netlist_dict
+    return netlists_dict
 
 
 def prepare_dut(
-    netlist_dict: dict[str, spi.Netlist], netlists_path: Path
+    netlists_dict: dict[str, spi.Netlist], netlists_path: Path
 ) -> dict[str, spi.Netlist]:
     """Prepare dut.cir from raw_kicad.cir"""
 
@@ -149,9 +151,9 @@ def prepare_dut(
     dut.del_line_starts_with(".include")  # delete second .include line
     dut.del_slash()  # delete forward slashes from node names
 
-    netlist_dict[Key.DUT] = dut  # add to netlist dictionary
+    netlists_dict[Key.DUT] = dut  # add to netlist dictionary
 
-    return netlist_dict
+    return netlists_dict
 
 
 def define_netlists(
@@ -249,18 +251,45 @@ def create_control_section(list_of_analyses1: list[spi.Analyses]) -> spi.Netlist
     return control1
 
 
+def create_top1_netlist(
+    netlists_dict: dict[str, spi.Netlist]
+) -> dict[str, spi.Netlist]:
+    """Create top1 netlist object and add to netlist dictionary"""
+
+    top1: spi.Netlist = (
+        netlists_dict[Key.TITLE]
+        + netlists_dict[Key.BLANKLINE]
+        + netlists_dict[Key.DUT]
+        + netlists_dict[Key.LOAD1]
+        + netlists_dict[Key.BLANKLINE]
+        + netlists_dict[Key.SUPPLIES]
+        + netlists_dict[Key.BLANKLINE]
+        + netlists_dict[Key.STIMULUS1]
+        + netlists_dict[Key.BLANKLINE]
+        + netlists_dict[Key.MODELS]
+        + netlists_dict[Key.BLANKLINE]
+        + netlists_dict[Key.CONTROL1]
+        + netlists_dict[Key.END_LINE]
+    )
+    netlists_dict[Key.TOP1] = top1  # add to netlist dictionary
+    return netlists_dict
+
+
 def simulate(
     paths_dict: dict[str, Path],
     netlists_dict: dict[str, spi.Netlist],
     list_of_analyses: list[spi.Analyses],
-) -> list[spi.SimResults]:
+) -> tuple[list[spi.SimResults], dict[str, spi.Netlist]]:
 
-    # create control section
-    control1: spi.Netlist = create_control_section(list_of_analyses)
+    # create control section and add to netlist dictionary
+    netlists_dict[Key.CONTROL1] = create_control_section(list_of_analyses)
+
+    # create top1 netlist object and add to netlist dictionary
+    netlists_dict = create_top1_netlist(netlists_dict)
 
     # create empty list for simulation results
     sim_results: list[spi.SimResults] = []
-    return sim_results
+    return sim_results, netlists_dict
 
 
 def analyze_results(
@@ -281,9 +310,7 @@ def main() -> None:
     print(list_of_analyses)
 
     # Simulate
-    sim_results: list[spi.SimResults] = simulate(
-        paths_dict, netlists_dict, list_of_analyses
-    )
+    sim_results, netlists_dict = simulate(paths_dict, netlists_dict, list_of_analyses)
 
     # finished: str = simulate_easy(
     #     paths_dict[Key.NGSPICE_EXE], paths_dict[Key.NETLISTS_PATH] / "top1.cir"
