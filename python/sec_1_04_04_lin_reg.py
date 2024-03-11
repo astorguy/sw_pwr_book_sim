@@ -3,7 +3,7 @@
 # region Imports
 import tomllib
 from pathlib import Path
-from typing import Any, Type
+from typing import Any
 
 import py4spice as spi
 
@@ -70,7 +70,7 @@ config_file_decoding = {
 # endregion
 
 
-# region Initialize
+# region functions
 def define_paths(
     my_config: dict[Any, Any], config_decoding: dict[str, str]
 ) -> dict[str, Path]:
@@ -181,7 +181,7 @@ def define_vector_sets() -> dict[str, spi.Vectors]:
 def initialize(
     config_decoding: dict[str, str]
 ) -> tuple[dict[str, Path], dict[str, spi.Netlist], dict[str, spi.Vectors]]:
-    """stuff"""
+    """Initialize the project by creating paths, netlists, and vector sets"""
     # read config file and create CONFIG dictionary
     config_name: Path = Path(config_decoding[Key.CONFIG_NAME])
     with open(config_name, "rb") as file:
@@ -204,11 +204,32 @@ def initialize(
     return paths_dict, netlists_dict, vectors_dict
 
 
-# endregion
+def define_analyses(
+    paths_dict: dict[str, Path], vectors_dict: dict[str, spi.Vectors]
+) -> list[spi.Analyses]:
+    """Define and return a list of analyses"""
+
+    # vectors for each analysis and path to put results
+    vec_all: spi.Vectors = vectors_dict[Key.VEC_ALL]
+    results_path: Path = paths_dict[Key.RESULTS_PATH]
+
+    # create empty list. Next sections define
+    list_of_analyses1: list[spi.Analyses] = []
+
+    # 1st analysis: operating point
+    op_cmd = "op"
+    op1 = spi.Analyses("op1", "op", op_cmd, vec_all, results_path)
+    list_of_analyses1.append(op1)
+
+    # 2nd analysis: transfer function
+    tf_cmd = "tf v(out) vin"
+    tf1 = spi.Analyses("tf1", "tf", tf_cmd, vec_all, results_path)
+    list_of_analyses1.append(tf1)
+
+    return list_of_analyses1
 
 
-# region simulate
-def simulate(ngspice_exe: Path, netlist: Path) -> str:
+def simulate_easy(ngspice_exe: Path, netlist: Path) -> str:
 
     # prepare simulate object, print out command, and simulate
     sim1: spi.Simulate = spi.Simulate(ngspice_exe, netlist)
@@ -217,21 +238,28 @@ def simulate(ngspice_exe: Path, netlist: Path) -> str:
     return "done"
 
 
+def analyze_results() -> None:
+    pass
+
+
 # endregion
 
 
 def main() -> None:
     # Initialize
     paths_dict, netlists_dict, vectors_dict = initialize(config_file_decoding)
-    print(paths_dict[Key.NGSPICE_EXE])
     print(netlists_dict[Key.TITLE])
-    print(vectors_dict[Key.VEC_IN_OUT].list_out())
+
+    list_of_analyses: list[spi.Analyses] = define_analyses(paths_dict, vectors_dict)
+    print(list_of_analyses)
 
     # Simulate
-    # finished: str = simulate(
-    #     paths_dict[Key.NGSPICE_EXE], paths_dict[Key.NETLISTS_PATH] / "top1.cir"
-    # )
-    # print(finished)
+    finished: str = simulate_easy(
+        paths_dict[Key.NGSPICE_EXE], paths_dict[Key.NETLISTS_PATH] / "top1.cir"
+    )
+    print(finished)
+
+    analyze_results()
 
 
 if __name__ == "__main__":
