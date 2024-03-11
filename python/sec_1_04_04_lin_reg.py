@@ -96,6 +96,9 @@ def define_paths(
         proj_path / my_config[config_global_section][config_results_dir_key]
     )
 
+    # create results directory if it does not exist
+    results_path.mkdir(parents=True, exist_ok=True)
+
     # create and return the paths dictionary
     return {
         Key.NGSPICE_EXE: ngspice_exe,
