@@ -259,7 +259,8 @@ def create_top1_netlist(
 ) -> dict[str, spi.Netlist]:
     """Create top1 netlist object and add to netlist dictionary"""
 
-    top1: spi.Netlist = (
+    # concatenate all tne netlists to make top1 and add to netlist dict
+    netlists_dict[Key.TOP1] = (
         netlists_dict[Key.TITLE]
         + netlists_dict[Key.BLANKLINE]
         + netlists_dict[Key.DUT]
@@ -274,7 +275,6 @@ def create_top1_netlist(
         + netlists_dict[Key.CONTROL1]
         + netlists_dict[Key.END_LINE]
     )
-    netlists_dict[Key.TOP1] = top1  # add to netlist dictionary
     return netlists_dict
 
 
