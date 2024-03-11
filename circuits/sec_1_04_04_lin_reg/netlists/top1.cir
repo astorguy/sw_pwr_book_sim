@@ -1,4 +1,4 @@
-* linear regulator, section 1.4.4
+* from power supply book: section 1.04.04 linear regulator
 
 rf1 beta rc 100
 cf1 rc div 100n
@@ -26,7 +26,7 @@ b1 out 0 v = {a * ((v(in1) * k1) + (v(in2) * k2))}
 .ends sum
 
 .control
-* timestamp: sun mar  3 06:00:25 2024
+* timestamp: mon mar 11 14:50:58 2024
 set wr_singlescale  $ makes one x-axis for wrdata
 set wr_vecnames     $ puts names at top of columns
 listing
@@ -36,5 +36,4 @@ tf v(out) vin
 print line all > /workspaces/sw_pwr_book_sim/circuits/sec_1_04_04_lin_reg/sim_results/tf1.txt
 quit
 .endc
-
 .end

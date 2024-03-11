@@ -275,6 +275,16 @@ def create_top1_netlist(
     return netlists_dict
 
 
+def execute_ngspice(ngspice_exe: Path, netlist: Path) -> str:
+    """Execute ngspice and return 'done' when finished"""
+
+    # prepare simulate object, print out command, and simulate
+    sim1: spi.Simulate = spi.Simulate(ngspice_exe, netlist)
+    # spi.print_section("Ngspice Command", sim1) # print out command
+    sim1.run()  # run the Ngspice simulation
+    return "done"
+
+
 def simulate(
     paths_dict: dict[str, Path],
     netlists_dict: dict[str, spi.Netlist],
@@ -286,6 +296,14 @@ def simulate(
 
     # create top1 netlist object and add to netlist dictionary
     netlists_dict = create_top1_netlist(netlists_dict)
+
+    # write top1 netlist to file
+    top1_file: Path = paths_dict[Key.NETLISTS_PATH] / "top1.cir"
+    netlists_dict[Key.TOP1].write_to_file(top1_file)
+
+    # execute ngspice
+    finished: str = execute_ngspice(paths_dict[Key.NGSPICE_EXE], top1_file)
+    print(finished)
 
     # create empty list for simulation results
     sim_results: list[spi.SimResults] = []
