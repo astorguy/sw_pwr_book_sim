@@ -40,6 +40,14 @@ class Key:
     BLANKLINE = "blankline"
     TITLE = "title"
     END_LINE = "end_line"
+    LOAD1 = "load1"
+    LOAD2 = "load2"
+    LOAD3 = "load3"
+    STIMULUS1 = "stimulus1"
+    STIMULUS2 = "stimulus2"
+    STIMULUS3 = "stimulus3"
+    SUPPLIES = "supplies"
+    MODELS = "models"
 
     # Keys for the vectors_dict
     VEC_ALL = "vec_all"
@@ -114,7 +122,17 @@ def special_netlists(
 def netlists_from_files(
     netlist_dict: dict[str, spi.Netlist], netlist_path: Path, Key: Type[Key]
 ) -> dict[str, spi.Netlist]:
-    print(netlist_path)
+    """read in netlists from files and add to netlist dictionary"""
+
+    netlist_dict[Key.LOAD1] = spi.Netlist(netlist_path / "load_resistive.cir")
+    netlist_dict[Key.LOAD2] = spi.Netlist(netlist_path / "load_resistive.cir")
+    netlist_dict[Key.LOAD3] = spi.Netlist(netlist_path / "load_current_pulse.cir")
+    netlist_dict[Key.STIMULUS1] = spi.Netlist(netlist_path / "stimulus_15v_dc.cir")
+    netlist_dict[Key.STIMULUS2] = spi.Netlist(netlist_path / "stimulus_15v_ramp.cir")
+    netlist_dict[Key.STIMULUS3] = spi.Netlist(netlist_path / "stimulus_15v_dc.cir")
+    netlist_dict[Key.SUPPLIES] = spi.Netlist(netlist_path / "supplies.cir")
+    netlist_dict[Key.MODELS] = spi.Netlist(netlist_path / "models.cir")
+
     return netlist_dict
 
 
