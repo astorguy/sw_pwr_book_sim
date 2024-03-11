@@ -26,25 +26,19 @@
         "ms-python.isort",
         "ms-toolsai.jupyter",
         "wesbos.theme-cobalt2",
-        "teabyii.ayu",
+        "tamasfe.even-better-toml",
         "ryanolsonx.solarized",
         "yy0931.mplstyle",
         "xuanli.spice"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash",
-        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.pythonPath": "/usr/local/bin/python",
         "editor.formatOnSave": true,
-        "python.analysis.typeCheckingMode": "basic",
-        "python.formatting.autopep8Path": "/usr/local/py-utils/bin/autopep8",
-        "python.formatting.blackPath": "/usr/local/py-utils/bin/black",
-        "python.formatting.yapfPath": "/usr/local/py-utils/bin/yapf",
-        "python.analysis.inlayHints.functionReturnTypes":true,
-        "python.analysis.inlayHints.variableTypes":true,
+        "python.analysis.typeCheckingMode": "strict",
         "workbench.colorTheme": "Cobalt2",
-        "python.formatting.provider": "none",
+        "python.formatting.provider": "black",
         "[python]": {
-          "editor.defaultFormatter": "ms-python.black-formatter",
           "editor.formatOnSave": true,
           "editor.codeActionsOnSave": {
             "source.organizeImports": true
