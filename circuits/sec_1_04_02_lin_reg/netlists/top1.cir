@@ -1,0 +1,30 @@
+* from power supply book: section 1.04.02 linear regulator
+
+e2 base vee ref div 10k
+q1 in base out 2n2222   
+rlower1 div vee 10k
+rupper1 out div 10k
+rload out out_meas 100
+vmeas out_meas 0 dc 0
+
+vee vee 0 dc 0
+vref ref 0 dc 2.5
+
+vin in 0 dc 12
+
+.model 2n2222 npn bf=105 br=4 cjc=12.2p cje=35.5p ikf=.5
++ ikr=.225 is=15.2f ise=8.2p ne=2 nf=1 nr=1 rb=1.49 rc=.149
++ re=.373 tf=500p tr=85n vaf=98.5 var=20 xtb=1.5
+
+.control
+* timestamp: tue mar 12 01:15:15 2024
+set wr_singlescale  $ makes one x-axis for wrdata
+set wr_vecnames     $ puts names at top of columns
+listing
+op
+print line all > /workspaces/sw_pwr_book_sim/circuits/sec_1_04_02_lin_reg/sim_results/op1.txt
+dc vin 6 17 0.1
+wrdata /workspaces/sw_pwr_book_sim/circuits/sec_1_04_02_lin_reg/sim_results/dc1.txt all
+quit
+.endc
+.end
