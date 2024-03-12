@@ -17,7 +17,7 @@ vin in 0 dc 12
 + re=.373 tf=500p tr=85n vaf=98.5 var=20 xtb=1.5
 
 .control
-* timestamp: tue mar 12 01:15:15 2024
+* timestamp: tue mar 12 22:50:01 2024
 set wr_singlescale  $ makes one x-axis for wrdata
 set wr_vecnames     $ puts names at top of columns
 listing
