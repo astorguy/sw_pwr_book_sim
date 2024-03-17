@@ -8,9 +8,10 @@ from pathlib import Path
 class Simulate:
     """ngspice simulation"""
 
-    def __init__(self, ngspice_exe: Path, netlist_filename: Path) -> None:
+    def __init__(self, ngspice_exe: Path, netlist_filename: Path, name: str) -> None:
         self.ngspice_exe: Path = ngspice_exe
         self.netlist_filename: Path = netlist_filename
+        self.name: str = name
 
     @property
     def ngspice_command(self) -> list[str]:
