@@ -1,6 +1,5 @@
 """setup or run an ngspice simulation """
 
-import logging
 import subprocess
 from pathlib import Path
 
@@ -8,9 +7,10 @@ from pathlib import Path
 class Simulate:
     """ngspice simulation"""
 
-    def __init__(self, ngspice_exe: Path, netlist_filename: Path) -> None:
+    def __init__(self, ngspice_exe: Path, netlist_filename: Path, name: str) -> None:
         self.ngspice_exe: Path = ngspice_exe
         self.netlist_filename: Path = netlist_filename
+        self.name: str = name
 
     @property
     def ngspice_command(self) -> list[str]:
@@ -22,7 +22,9 @@ class Simulate:
 
     def run(self) -> None:
         """Execute the ngspice simulation."""
-        try:
-            subprocess.run(self.ngspice_command, check=True)
-        except subprocess.CalledProcessError as e:
-            logging.error(f"Error running ngspice simulation: {e}")
+        complete = subprocess.run(
+            self.ngspice_command, capture_output=True, check=True, text=True
+        )
+
+        # NOTE; change this to return the output. Or maybe do something else with it.
+        print(complete.stdout)
