@@ -26,5 +26,5 @@ class Simulate:
             self.ngspice_command, capture_output=True, check=True, text=True
         )
 
-        ### NOTE; change this to return the output. Or maybe do something else with it.
+        # NOTE; change this to return the output. Or maybe do something else with it.
         print(complete.stdout)
