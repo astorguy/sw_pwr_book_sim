@@ -22,9 +22,11 @@ class Simulate:
 
     def run(self) -> None:
         """Execute the ngspice simulation."""
-        complete = subprocess.run(
+        completed_sim = subprocess.run(
             self.ngspice_command, capture_output=True, check=True, text=True
         )
 
+        print(f"return code: {completed_sim.returncode}")
+
         # NOTE; change this to return the output. Or maybe do something else with it.
-        print(complete.stdout)
+        print(completed_sim.stdout)
