@@ -3,6 +3,7 @@
 ngspice_exe_str = "/usr/bin/ngspice"
 netlists_dir_str = "netlists"        # relative to proj dir, where netlists will be stored
 results_dir_str = "sim_results"      # rel to proj dir, where sim results will be stored
+sim_transcript_str = "sim_transcript.log"   # filename for ngspice simulation transcripts
 
 # Section 1-04-02 Linear Regulator
 [sec_1_04_02]
