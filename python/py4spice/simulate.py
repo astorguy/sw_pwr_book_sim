@@ -1,5 +1,6 @@
 """setup or run an ngspice simulation """
 
+import datetime
 import subprocess
 from pathlib import Path
 
@@ -7,10 +8,20 @@ from pathlib import Path
 class Simulate:
     """ngspice simulation"""
 
-    def __init__(self, ngspice_exe: Path, netlist_filename: Path, name: str) -> None:
+    def __init__(
+        self,
+        ngspice_exe: Path,
+        netlist_filename: Path,
+        transcript_filename: Path,
+        name: str,
+    ) -> None:
         self.ngspice_exe: Path = ngspice_exe
         self.netlist_filename: Path = netlist_filename
+        self.transcript_filename: Path = transcript_filename
         self.name: str = name
+        self.transcript_content: str = (
+            f"\n-----------------\nSimulation name: {self.name}"
+        )
 
     @property
     def ngspice_command(self) -> list[str]:
@@ -22,11 +33,18 @@ class Simulate:
 
     def run(self) -> None:
         """Execute the ngspice simulation."""
+
         completed_sim = subprocess.run(
             self.ngspice_command, capture_output=True, check=True, text=True
         )
 
-        print(f"return code: {completed_sim.returncode}")
+        # add timestamp to transcript
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.transcript_content += f"\nTimestamp: {timestamp}\n"
 
-        # NOTE; change this to return the output. Or maybe do something else with it.
-        print(completed_sim.stdout)
+        # add simulation output to transcript
+        self.transcript_content += completed_sim.stdout
+
+        # append transcript to transcript file
+        with open(self.transcript_filename, "a") as file:
+            file.write(self.transcript_content)
