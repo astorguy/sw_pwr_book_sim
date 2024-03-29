@@ -15,7 +15,7 @@ vmeas out_meas 0 dc 0
 vcom com 0 dc 0
 vref vref 0 dc 2.5
 
-vin in 0 dc 15
+vin in 0 pwl 0 15 10u 15 11u 500
 
 .subckt gain in out k=1
 e1 out 0 in 0 {k}
@@ -26,7 +26,7 @@ b1 out 0 v = {a * ((v(in1) * k1) + (v(in2) * k2))}
 .ends sum
 
 .control
-* timestamp: fri mar 29 19:27:49 2024
+* timestamp: fri mar 29 19:43:53 2024
 set wr_singlescale  $ makes one x-axis for wrdata
 set wr_vecnames     $ puts names at top of columns
 tran 1e-9 20e-6
