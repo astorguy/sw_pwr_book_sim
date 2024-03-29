@@ -29,10 +29,8 @@ b1 out 0 v = {a * ((v(in1) * k1) + (v(in2) * k2))}
 * timestamp: fri mar 29 19:11:41 2024
 set wr_singlescale  $ makes one x-axis for wrdata
 set wr_vecnames     $ puts names at top of columns
-op
-print line all > /workspaces/sw_pwr_book_sim/circuits/sec_1_04_04_lin_reg/sim_results/op1.txt
-tf v(out) vin
-print line all > /workspaces/sw_pwr_book_sim/circuits/sec_1_04_04_lin_reg/sim_results/tf1.txt
+tran 1e-9 20e-6
+wrdata /workspaces/sw_pwr_book_sim/circuits/sec_1_04_04_lin_reg/sim_results/tr1.txt all
 quit
 .endc
 .end
