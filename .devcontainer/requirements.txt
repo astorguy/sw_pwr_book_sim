@@ -1,7 +1,7 @@
-mypy
 ipykernel
 ipywidgets
 isort
-numpy
+mypy
 matplotlib
+numpy
 scipy
