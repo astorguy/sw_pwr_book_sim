@@ -13,6 +13,7 @@ AnaType: TypeAlias = Literal[
 # Categorize so we can hanlde results correctly
 TABLE_DATA: list[AnaType] = ["op", "sens", "tf"]
 PLOT_DATA: list[AnaType] = ["ac", "dc", "disto", "noise", "pz", "sp", "tran"]
+COMPLEX_DATA: list[AnaType] = ["ac"] # only "ac" for now. need to check for others
 TIME_AXIS: list[AnaType] = ["tran"]
 SIG_AXIS: list[AnaType] = ["dc"]
 FREQ_AXIS: list[AnaType] = ["ac", "noise"]
