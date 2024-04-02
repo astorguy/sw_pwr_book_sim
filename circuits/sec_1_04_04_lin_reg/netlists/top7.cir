@@ -7,7 +7,8 @@ e2 g com beta com 10
 x2 in gain gain k=0.05
 rsol1 sum out 1
 x3 gain g sum sum k1=1 k2=1 a=1
-iload out 0 pwl 0 0.1 10u 0.1 11u 1.0
+rf beta div 470k
+iload out 0 pwl 0 0.1 100u 0.1 101u 1.0 500u 1.0 501u 0.1
 
 vcom com 0 dc 0
 vref vref 0 dc 2.5
@@ -23,11 +24,11 @@ b1 out 0 v = {a * ((v(in1) * k1) + (v(in2) * k2))}
 .ends sum
 
 .control
-* timestamp: tue apr  2 22:38:21 2024
+* timestamp: tue apr  2 23:26:35 2024
 set wr_singlescale  $ makes one x-axis for wrdata
 set wr_vecnames     $ puts names at top of columns
-tran 1e-9 20e-6
-wrdata /workspaces/sw_pwr_book_sim/circuits/sec_1_04_04_lin_reg/sim_results/tr1.txt all
+tran 0.1u 1m
+wrdata /workspaces/sw_pwr_book_sim/circuits/sec_1_04_04_lin_reg/sim_results/tr1.txt out
 quit
 .endc
 .end
