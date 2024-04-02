@@ -145,7 +145,7 @@ class SimResults:
             header, data = cls._table_processing(filename)
             return cls(analysis_type, header, data)
 
-        # otherwise it it plot data
+        # otherwise it is plot data
         (header1, data1) = cls._plot_processing(filename)
         (header, data) = cls._remove_dups(header1, data1)
         return cls(analysis_type, header, data)
