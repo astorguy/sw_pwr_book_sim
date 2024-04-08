@@ -1,4 +1,5 @@
 """__init__.py"""
+
 from .analyses import Analyses
 from .control import Control
 from .globals_types import (
@@ -17,7 +18,9 @@ from .plot import Plot
 from .print_section import print_section
 from .simulate import Simulate
 from .sim_results import SimResults
+from .sim_results2 import SimResults2
 from .vectors import Vectors
+from .waveforms import Waveforms
 
 __all__ = (
     "Analyses",
@@ -29,8 +32,10 @@ __all__ = (
     "print_section",
     "Simulate",
     "SimResults",
+    "SimResults2",
     "StepInfo",
     "Vectors",
+    "Waveforms",
     "numpy_flt",
     "AnaType",
     "TABLE_DATA",
