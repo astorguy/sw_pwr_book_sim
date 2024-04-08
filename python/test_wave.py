@@ -20,34 +20,42 @@ def main() -> None:
     # print(a1.data)
 
     header = ["x", "y1", "y2", "y3", "y4"]
-    x_vals = [1.1, 1.3, 1.5, 1.8, 2.0]
-    y1_vals = [3.4, 3.2, 3.11, 3.4, 3.6]
-    y2_vals = [2.4, 4.2, 4.11, 4.4, 4.6]
-    y3_vals = [8.4, 5.2, 5.11, 5.4, 5.6]
-    y4_vals = [66.4, 6.2, 6.11, 6.4, 6.6]
+    # x_vals = [1.1, 1.3, 1.5, 1.8, 2.0]
+    # y1_vals = [3.4, 3.2, 3.11, 3.4, 3.6]
+    # y2_vals = [2.4, 4.2, 4.11, 4.4, 4.6]
+    # y3_vals = [8.4, 5.2, 5.11, 5.4, 5.6]
+    # y4_vals = [66.4, 6.2, 6.11, 6.4, 6.6]
+
+    x_vals = [0.0]
+    y1_vals = [3.4]
+    y2_vals = [2.4]
+    y3_vals = [8.4]
+    y4_vals = [66.4]
 
     data_non_linear_spacing = np.vstack([x_vals, y1_vals, y2_vals, y3_vals, y4_vals]).T
 
-    # print(header)
-    # print(data_non_linear_spacing)
+    print(header)
+    print(data_non_linear_spacing)
 
-    a1 = spi.Waveforms(header, data_non_linear_spacing)
+    a1 = spi.Waveforms(header, data_non_linear_spacing, 5)
+    print(f"header {a1.header}")
+    print(f"data {a1.data}")
 
-    # Create a new figure
-    plt.figure()
+    # # Create a new figure
+    # plt.figure()
 
-    # Get the x-values (first column of data)
-    my_x = a1.data[:, 0]
+    # # Get the x-values (first column of data)
+    # my_x = a1.data[:, 0]
 
-    # Plot each y-values array against x-values
-    for i in range(1, a1.data.shape[1]):
-        plt.plot(my_x, a1.data[:, i], label=f"y{i}")
+    # # Plot each y-values array against x-values
+    # for i in range(1, a1.data.shape[1]):
+    #     plt.plot(my_x, a1.data[:, i], label=f"y{i}")
 
-    # Add a legend
-    plt.legend()
+    # # Add a legend
+    # plt.legend()
 
-    # Save the figure as a PNG file
-    plt.savefig("plot.png")
+    # # Save the figure as a PNG file
+    # plt.savefig("plot.png")
 
 
 if __name__ == "__main__":
