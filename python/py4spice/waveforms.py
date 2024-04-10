@@ -29,3 +29,44 @@ class Waveforms:
     def npts(self) -> int:
         """number of data points (rows) in the waveform"""
         return self.data.shape[0]
+
+    def vec_subset(self, vecs: list[str]) -> None:
+        """create a smaller subset of the header vectors
+
+        Args:
+            vecs (list[str]): vector subset
+        """
+        if set(vecs).issubset(self.header):
+            indices_for_deletion = [
+                index for index, item in enumerate(self.header) if item not in vecs
+            ]
+            indices_for_deletion.sort(reverse=True)
+            del indices_for_deletion[-1]  # remove index 0 (x-axis) from list
+
+            # Delete header names & data columns, starting from end, working backwards
+            for i in indices_for_deletion:
+                del self.header[i]
+                self.data = np.delete(self.data, i, axis=1)
+        else:
+            print("Error: vecs is not a subset of the header list")
+
+    def x_range(self, x_begin: float, x_end: float, npts: int = 1000) -> None:
+        """Limit range of data and create linear-spaced points
+
+        Args:
+            x_begin (float): new x start
+            x_end (float): new x end
+            npts (int): number of linear points in new array
+        """
+        x_orig = self.data[:, 0]
+        y_origs = self.data[:, 1:]
+        x_new = np.linspace(x_begin, x_end, npts)
+        new_array = np.zeros((npts, y_origs.shape[1] + 1))
+        new_array[:, 0] = x_new
+
+        # Interpolate y columns using interp1d
+        for i in range(y_origs.shape[1]):
+            funct = interp1d(x_orig, y_origs[:, i])
+            new_array[:, i + 1] = funct(x_new)
+
+        self.data = new_array
