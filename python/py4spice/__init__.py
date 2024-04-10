@@ -18,7 +18,6 @@ from .plot import Plot
 from .print_section import print_section
 from .simulate import Simulate
 from .sim_results import SimResults
-from .sim_results2 import SimResults2
 from .vectors import Vectors
 from .waveforms import Waveforms
 
@@ -32,7 +31,6 @@ __all__ = (
     "print_section",
     "Simulate",
     "SimResults",
-    "SimResults2",
     "StepInfo",
     "Vectors",
     "Waveforms",
