@@ -3,65 +3,45 @@
 from pathlib import Path
 
 import numpy as np
+from matplotlib.ticker import EngFormatter
 
 from .globals_types import TABLE_DATA, AnaType, numpy_flt
 
 
 class SimResults2:
     """Create objects for results extracted from simulation text files.
-
-    Note: All data has an x-axis as first column in array even if it is table
-    data such as "op", "tf", etc. This is done for data consistency
+    Depending on the analysis type, the data is stored in different ways:
+    either a plot or a table (dictionary).
     """
 
-    def __init__(self, analysis_type: AnaType, header: list[str], data: numpy_flt):
-        self.analysis_type = analysis_type
-        self.header = header
-        self.data = data
+    def __init__(
+        self,
+        analysis_type: AnaType,
+        header: list[str],
+        data_plot: numpy_flt,
+        data_table: dict[str, float],
+    ):
+        self.analysis_type: AnaType = analysis_type
+        self.header: list[str] = header
+        self.data_plot: numpy_flt = data_plot
+        self.data_table: dict[str, float] = data_table
 
     def __str__(self) -> str:
-        string1 = f"analysis_type: {self.analysis_type}\n\n"
-        string2 = f"header:\n{self.header}\n\n"
-        string3 = f"data:\n{self.data}"
-        return string1 + string2 + string3
-
-    def __repr__(self) -> str:
-        package_name = __package__
-        class_name = type(self).__name__
-        string = f"{package_name}.{class_name}("
-        string += f"analysis_type = {self.analysis_type!r}, "
-        string += f"header = {self.header!r}, "
-        string += f"data = numpy.{self.data!r})"
+        string = f"analysis_type: {self.analysis_type}\n\n"
+        string += f"header:\n{self.header}\n\n"
+        string += f"data_plot:\n{self.data_plot}"
+        string += f"data_table:\n{self.data_table}"
         return string
 
     @staticmethod
-    def _table_processing(filename: Path) -> tuple[list[str], numpy_flt]:
-        """Convert simulation text data that is in the form of a table.
-
-        Args:
-            filename (Path): text file results from a simulation
-
-        Returns:
-            tuple[list[str], numpy_flt]: header and footer data
-        """
-        # Read in each line putting first word into header, last word float
-        first_words = ["x-axis"]  # Initialize with x-axis
-        last_words = np.array([0.0], dtype=np.float64)  # Initialize with x = 0.0
+    def _table_processing(filename: Path) -> dict[str, float]:
+        """Process a text file with table data and return a dictionary"""
+        data_dict: dict[str, float] = {}  # define empty dictionary
         with open(filename, "r", encoding="utf-8") as file:
-            for line in file:
+            for line in file:  # for each line: 1st word: key, last word: value
                 words = line.split()
-                if len(words) > 0:
-                    first_word = words[0]
-                    last_word = float(words[-1])
-                    first_words.append(first_word)
-                    last_words = np.append(last_words, (last_word))
-
-        header = first_words
-
-        # turn last words to 2d numpy for data consistancy
-        data = np.column_stack((last_words,))
-
-        return header, data
+                data_dict[str(words[0])] = float(words[-1])
+        return data_dict
 
     @staticmethod
     def _plot_processing(filename: Path) -> tuple[list[str], numpy_flt]:
@@ -131,20 +111,29 @@ class SimResults2:
 
     @classmethod
     def from_file(cls, analysis_type: AnaType, filename: Path) -> "SimResults2":
-        """read data from a ngspice simulation file
-
-        Args:
-            analysis_type (AnaType): the analysis type of the text sim data
-            filename (Path): where is the sim results located
-
-        Returns:
-            SimResults: object created
+        """Create a SimResults object from a text file. In other words,
+        read in the simulation results file.
         """
         if analysis_type in TABLE_DATA:
-            header, data = cls._table_processing(filename)
-            return cls(analysis_type, header, data)
+            return cls(analysis_type, [], np.array([]), cls._table_processing(filename))
 
-        # otherwise it is plot data
-        (header1, data1) = cls._plot_processing(filename)
-        (header, data) = cls._remove_dups(header1, data1)
-        return cls(analysis_type, header, data)
+        # if not table data, then it is plot data
+        (header1, data_plot1) = cls._plot_processing(filename)
+        (header2, data_plot2) = cls._remove_dups(header1, data_plot1)
+        return cls(analysis_type, header2, data_plot2, {})
+
+    def table_for_print(self) -> str:
+        """Convert table data to a string for printing"""
+
+        # set up engineering notation function
+        engFormat: EngFormatter = EngFormatter(places=3, sep="")
+
+        max_key_len = max(len(key) for key in self.data_table)
+        result = ""
+        for key, value in self.data_table.items():
+            value_str: str = engFormat(value)  # use engineering notation
+            is_negative = value < 0  # Adjust padding based on sign
+            padding = max_key_len + (2 if not is_negative else 1)
+            formatted_row = f"{key:<{padding}}{value_str}"
+            result += formatted_row + "\n"
+        return result
