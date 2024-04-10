@@ -70,3 +70,28 @@ class Waveforms:
             new_array[:, i + 1] = funct(x_new)
 
         self.data = new_array
+
+    def single_column(self, signal_name: str) -> numpy_flt:
+        """Returns a single Numpy Array for the signal
+
+        Returns:
+            _type_: 1D numpy array
+        """
+        index = self.header.index(signal_name)
+        the_column: numpy_flt = self.data[:, index]
+        return the_column
+
+    def x_axis_and_sigs(self, signal_names: list[str]) -> list[numpy_flt]:
+        """Returns X-Axis numpy and all the signals
+
+        Args: signal names of numpy's to return with X-axis
+
+        Returns:
+            _type_: list of the X-axis and signals numpy's
+        """
+
+        list_of_numpys = [self.data[:, 0]]  # First, the x-axis (always 1st col.)
+        for signal_name in signal_names:
+            list_of_numpys.append(self.single_column(signal_name))
+
+        return list_of_numpys
