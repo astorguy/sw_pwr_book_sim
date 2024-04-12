@@ -99,7 +99,7 @@ class SimResults:
                 imag_part = data_plot_out[:, i + 1]
                 # 1e-20 is added to avoid log(0) error
                 mag = 20 * np.log10(np.sqrt(real_part**2 + imag_part**2) + 1e-20)
-                phase = np.arctan2(imag_part, real_part)
+                phase = np.arctan2(imag_part, real_part) * 180 / np.pi
                 data_plot_out[:, i] = mag
                 data_plot_out[:, i + 1] = phase
                 header_out[i] += "-mag"
