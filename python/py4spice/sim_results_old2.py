@@ -85,28 +85,6 @@ class SimResults:
         return duplicate_indexes
 
     @staticmethod
-    def _mag_phase_convert(
-        header_in: list[str], data_plot_in: numpy_flt
-    ) -> tuple[list[str], numpy_flt]:
-        """Convert real and imaginary data to magnitude and phase"""
-        header_out = header_in.copy()
-        data_plot_out = data_plot_in.copy()
-        for i in range(len(header_out) - 1):
-            current_name = header_out[i]
-            next_name = header_out[i + 1]
-            if current_name == next_name:
-                real_part = data_plot_out[:, i]
-                imag_part = data_plot_out[:, i + 1]
-                # 1e-20 is added to avoid log(0) error
-                mag = 20 * np.log10(np.sqrt(real_part**2 + imag_part**2) + 1e-20)
-                phase = np.arctan2(imag_part, real_part)
-                data_plot_out[:, i] = mag
-                data_plot_out[:, i + 1] = phase
-                header_out[i] += "-mag"
-                header_out[i + 1] += "-phase"
-        return header_out, data_plot_out
-
-    @staticmethod
     def _remove_dups(
         header_in: list[str], data_in: numpy_flt
     ) -> tuple[list[str], numpy_flt]:
@@ -141,16 +119,6 @@ class SimResults:
 
         # if not table data, then it is plot data
         (header1, data_plot1) = cls._plot_processing(filename)
-
-        # if frequency analysis
-        if analysis_type in ["ac", "noise"]:
-            # convert to mag and phase
-            (header2, data_plot2) = cls._mag_phase_convert(header1, data_plot1)
-            # remove duplicate columns
-            (header3, data_plot3) = cls._remove_dups(header2, data_plot2)
-            return cls(analysis_type, header3, data_plot3, {})
-
-        # if not frequency analysis, time or valtage x-axis
         (header2, data_plot2) = cls._remove_dups(header1, data_plot1)
         return cls(analysis_type, header2, data_plot2, {})
 
