@@ -1,14 +1,15 @@
 # Top-level settings (common to all projects)
-[global]
-ngspice_exe_str = "/usr/bin/ngspice"
-netlists_dir_str = "netlists"        # relative to proj dir, where netlists will be stored
-results_dir_str = "sim_results"      # rel to proj dir, where sim results will be stored
-sim_transcript_str = "sim_transcript.log"   # filename for ngspice simulation transcripts
+[GLOBAL]
+PROJECT = "SEC_1_04_04"                   # points to section of config file
+NGSPICE_EXE_STR = "/usr/bin/ngspice"
+NETLISTS_DIR_STR = "netlists"             # relative to proj dir, where netlists will be stored
+RESULTS_DIR_STR = "sim_results"           # rel to proj dir, where sim results will be stored
+SIM_TRANSCRIPT_STR = "sim_transcript.log" # filename for ngspice simulation transcripts
 
 # Section 1-04-02 Linear Regulator
-[sec_1_04_02]
-proj_path_str = "/workspaces/sw_pwr_book_sim/circuits/sec_1_04_02_lin_reg"
+[SEC_1_04_02]
+PROJ_PATH_STR = "/workspaces/sw_pwr_book_sim/circuits/sec_1_04_02_lin_reg"
 
 # Section 1-04-04 Linear Regulator
-[sec_1_04_04]
-proj_path_str = "/workspaces/sw_pwr_book_sim/circuits/sec_1_04_04_lin_reg"
+[SEC_1_04_04]
+PROJ_PATH_STR = "/workspaces/sw_pwr_book_sim/circuits/sec_1_04_04_lin_reg"
