@@ -24,13 +24,13 @@ b1 out 0 v = {a * ((v(in1) * k1) + (v(in2) * k2))}
 .ends sum
 
 .control
-* timestamp: mon apr 15 03:44:18 2024
+* timestamp: mon apr 15 03:58:08 2024
 set wr_singlescale  $ makes one x-axis for wrdata
 set wr_vecnames     $ puts names at top of columns
 op
 print line all > /workspaces/sw_pwr_book_sim/circuits/sec_1_04_04_lin_reg/sim_results/op1.txt
-op
-print line all > /workspaces/sw_pwr_book_sim/circuits/sec_1_04_04_lin_reg/sim_results/op1.txt
+dc vin 6 17 0.1
+wrdata /workspaces/sw_pwr_book_sim/circuits/sec_1_04_04_lin_reg/sim_results/dc1.txt all
 quit
 .endc
 .end
