@@ -1,7 +1,7 @@
-* from power supply book: section 1.04.02 linear regulator
+* title line
 
 e2 base vee ref div 10k
-q1 in base out 2n2222   
+q1 in base out 2n2222
 rlower1 div vee 10k
 rupper1 out div 10k
 rload out out_meas 100
@@ -17,10 +17,9 @@ vin in 0 dc 12
 + re=.373 tf=500p tr=85n vaf=98.5 var=20 xtb=1.5
 
 .control
-* timestamp: wed mar 13 15:13:09 2024
+* timestamp: mon apr 15 05:33:35 2024
 set wr_singlescale  $ makes one x-axis for wrdata
 set wr_vecnames     $ puts names at top of columns
-listing
 op
 print line all > /workspaces/sw_pwr_book_sim/circuits/sec_1_04_02_lin_reg/sim_results/op1.txt
 dc vin 6 17 0.1

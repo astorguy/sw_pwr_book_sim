@@ -72,26 +72,44 @@ class Waveforms:
         self.data = new_array
 
     def single_column(self, signal_name: str) -> numpy_flt:
-        """Returns a single Numpy Array for the signal
-
-        Returns:
-            _type_: 1D numpy array
-        """
-        index = self.header.index(signal_name)
-        the_column: numpy_flt = self.data[:, index]
-        return the_column
+        """Returns a single Numpy Array for the wave"""
+        index: int = self.header.index(signal_name)
+        return self.data[:, index]
 
     def x_axis_and_sigs(self, signal_names: list[str]) -> list[numpy_flt]:
-        """Returns X-Axis numpy and all the signals
-
-        Args: signal names of numpy's to return with X-axis
-
-        Returns:
-            _type_: list of the X-axis and signals numpy's
-        """
+        """Returns X-Axis numpy and all the waves"""
 
         list_of_numpys = [self.data[:, 0]]  # First, the x-axis (always 1st col.)
         for signal_name in signal_names:
             list_of_numpys.append(self.single_column(signal_name))
 
         return list_of_numpys
+
+    def new_wave(self, wave_name: str, column: numpy_flt) -> None:
+        """Add a new waveform to the object"""
+        self.header.append(wave_name)
+        self.data = np.column_stack((self.data, column))
+
+    def multiply(self, factor1_name: str, factor2_name: str, result_name: str) -> None:
+        """Multiply two waves and store in a new wave"""
+        factor1 = self.single_column(factor1_name)
+        factor2 = self.single_column(factor2_name)
+        result = np.multiply(factor1, factor2)
+        self.new_wave(result_name, result)
+
+    def scaler(self, factor: float, wave_name: str, result_name: str) -> None:
+        """Multiply a wave by a scalar and store in a new wave"""
+        wave = self.single_column(wave_name)
+        self.new_wave(result_name, factor * wave)
+
+    def divide(self, dividend_name: str, divisor_name: str, result_name: str) -> None:
+        """Divide two waves and store in a new wave"""
+        dividend = self.single_column(dividend_name)
+        divisor = self.single_column(divisor_name)
+
+        # Use numpy's divide function to handle division by zero
+        result = np.divide(
+            dividend, divisor, out=np.zeros_like(dividend), where=divisor != 0
+        )
+
+        self.new_wave(result_name, result)
